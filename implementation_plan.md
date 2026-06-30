@@ -1,56 +1,61 @@
-# TitikLokal - Architecture, Design System & Interactive High-Fidelity Implementation Plan
+# Implementation Plan: TitikLokal V2 (Architecture-Driven)
 
-## Deskripsi Tujuan
+Rencana implementasi ini dirancang secara ketat untuk mematuhi **[Functional Requirement Specification (FRS) V2](file:///C:/Users/Another/.gemini/antigravity/brain/fdebef0a-3d58-4227-aca9-c2062d707ac9/frs_titiklokal.md)** dan **[Software Architecture Document (SAD)](file:///C:/Users/Another/.gemini/antigravity/brain/fdebef0a-3d58-4227-aca9-c2062d707ac9/sad_titiklokal.md)**. 
 
-Membangun **Interactive High-Fidelity Prototype** untuk ekosistem TitikLokal. Prototype ini tidak boleh memiliki tombol "Coming Soon" atau fitur *placeholder*. Seluruh interaksi (Auth, Buyer, Seller, Admin) harus 100% fungsional di sisi klien menggunakan struktur data relasional simulasi berbasis `localStorage`. Perubahan state (misal: penjual menerima pesanan) harus seketika terefleksikan di sisi pembeli (status tracking berubah). 
-
-Aplikasi dirancang setara startup production-ready (Vercel/Stripe-like UI) dengan arsitektur file modular berbasis ES Modules yang siap di-porting ke React/Vue/Backend nyata.
+Karena skala proyek yang luar biasa masif dan memiliki arsitektur 5-Layer (Presentation, State, Business Logic, Repository, Storage), pembangunan akan dipecah ke dalam **6 Fase Eksekusi Strategis** dengan melakukan perombakan struktur *folder*.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> **Skala Pengembangan High-Fidelity (No-Placeholder Rule)**
-> Mengingat aturan ketat Anda bahwa **tidak boleh ada satupun tombol mati**, pengembangan ini setara dengan menulis logika ribuan baris kode frontend kompleks. 
-> Untuk memastikan kualitas sempurna tanpa bug di setiap langkah, saya telah merinci ulang **Fase 2**. 
-> Di Fase 2 ini, kita HANYA akan fokus menyelesaikan:
-> 1. **Autentikasi Penuh**: Register/Login, Logout, Session User.
-> 2. **Ekosistem Pembeli Sempurna**: Beranda interaktif (Filter/Kategori hidup), Wishlist (tambah/hapus), Follow Toko, Review/Rating interaktif, Chat (Simulasi UI Chat Room), Checkout Flow Lengkap (Pilih Alamat, Kurir dengan harga dinamis, Pembayaran, Simulasi Voucher), dan Tracking Pesanan Real-time (membaca state localStorage terbaru).
+> Sesuai SAD, struktur folder proyek saat ini (`js/app.js`, `js/views/`, dll) harus dipecah/dipindahkan ke dalam struktur layer arsitektur (`js/core/`, `js/services/`, `js/components/`).
 > 
-> *Catatan: Menu "Notifikasi" dan "Pengaturan Akun" pembeli juga akan dibuat layarnya dengan fungsi update data ke localStorage.*
-> 
-> Apakah Anda setuju kita kunci ruang lingkup **Fase 2** pada Pembeli & Auth ini terlebih dahulu, agar saya bisa langsung menulis ratusan baris logika JS untuk membuatnya hidup secara presisi?
+> **Mohon persetujuan akhir Anda:** Jika Anda menyetujui SAD dan rencana restrukturisasi *folder* ini, saya akan langsung memulai **Fase 1**.
 
-## Arsitektur Data `localStorage` (Simulasi Relasional)
+---
 
-Untuk mendukung interaksi antar-role, `localStorage` (`titiklokal_data`) akan distrukturkan mirip database:
-- `users`: Array of user objects (id, role, name, email, password, address, wishlist_ids, followed_shop_ids).
-- `shops`: Array of shop objects (id, owner_id, status, promo_banners, settings).
-- `products`: Array of product objects (id, shop_id, category, name, price, stock, is_active, reviews).
-- `orders`: Array of order objects (id, buyer_id, shop_id, items, total, shipping, status: 'pending'|'accepted'|'shipping'|'completed').
-- `chats`: Array of chat sessions.
+## Proposed Changes (Execution Strategy)
 
-## Pembagian Fase Eksekusi
+### Phase 1: Folder Restructuring & Core Infrastructure
+**Fokus:** Membangun *Layer Architecture* dan merombak struktur folder *Frontend*.
+- #### [MODIFY] `index.html` & `css/styles.css`
+  Menyiapkan kontainer *Root* dan *CSS System* (variabel 8pt Grid, Typografi).
+- #### [NEW] Folder System
+  Membuat `js/core/store.js` (State Manager), `js/core/router.js` (Interceptor SPA), dan `js/core/api.js` (Repository Layer).
+- #### [MODIFY] `js/config/data.js` & `js/core/storage.js`
+  Mengekspansi *Database Schema* menjadi 30 Tabel Relasional (menambahkan *Chats*, *Drivers*, *Notifications*).
 
-### Fase 1: Design System & Fondasi UI (SELESAI ✅)
-- Royal Blue Vercel/Stripe styling, responsivitas Desktop/Mobile, skeleton loader, Heroicons.
+### Phase 2: Design System & Reusable Components
+**Fokus:** Mengubah UI manual menjadi UI berbasis fungsi/komponen statis.
+- #### [NEW] `js/components/ui-library.js` & `js/components/cards.js`
+  Menulis fungsi pembuat komponen seperti `Button()`, `AppBar()`, `StoreCard()`, `OrderTracker()`.
+- #### [NEW] `js/utils/formatters.js`
+  Pembuatan alat bantu untuk validasi form, format rupiah, dan algoritma *Debounce*.
 
-### Fase 2: Auth & Full Buyer Experience (FOKUS SAAT INI ⏳)
-- Layar Login & Register (Multi-role).
-- Implementasi fungsional `data.js` ke `storage.js` secara mendalam.
-- **Interaksi Penuh**: Wishlist (togle ikon hati), Follow Toko, Simulasi Chat UI.
-- **Checkout Interaktif**: Validasi keranjang -> Pilih Alamat Dummy -> Pilih Kurir -> Bayar -> Pindah ke "Riwayat Pesanan".
-- Layar Pengaturan Akun (Edit nama, alamat).
+### Phase 3: "Jelajah Sekitar Saya" & Map Integration
+**Fokus:** Mengintegrasikan Leaflet JS sebagai fitur *Core Explorer*.
+- #### [NEW] `js/services/mapService.js`
+  Lapisan *Business Logic* untuk menangani klaster *marker*, perhitungan radius, dan sinkronisasi dengan *UI Layer*.
+- #### [MODIFY] `js/views/buyer.js`
+  Merekonstruksi *Homepage Buyer* dengan konsep personalisasi (*Greeting*, *Recent Viewed*).
 
-### Fase 3: Full Seller Dashboard (Mendatang)
-- Manajemen Produk utuh (CRUD via form, update ke array `products`).
-- Manajemen Pesanan (Terima/Tolak mengubah state `orders` dan notifikasi pembeli).
-- Promosi & Keuangan (Pembuatan Voucher, Chart Penjualan dinamis berdasarkan pesanan "Completed").
-- Pengaturan Toko.
+### Phase 4: The 15-Step Checkout Service
+**Fokus:** Simulasi Transaksi tingkat lanjut.
+- #### [NEW] `js/services/checkoutService.js` & `js/views/checkout.js`
+  Membangun logika kalkulasi jarak, harga ongkir dinamis, dan seleksi *Driver* Instan. Semua akan dilindungi oleh *Error Boundary*.
 
-### Fase 4: Full Admin Dashboard (Mendatang)
-- Approval Toko/Produk, Manajemen User, Laporan Statistik Keseluruhan berbasis agregasi array `orders` dan `users`.
+### Phase 5: Seller CMS & Real-Time Sync
+**Fokus:** Dashboard Penjual dan Sinkronisasi *State*.
+- #### [MODIFY] `js/views/seller.js`
+  Menyuntikkan analitik *dummy*, kanban *Orders*, manajemen katalog produk, dan tombol fungsi "Preview Mode" (Desktop/Tablet/Mobile *Viewport Simulation*).
 
-## Verification Plan (Fase 2)
-1. **Auth**: Buat akun pembeli baru -> Login -> Logout. State tersimpan.
-2. **Wishlist/Follow**: Klik "Wishlist" pada produk -> Pergi ke tab Wishlist -> Produk ada di sana.
-3. **Checkout -> Tracking**: Masukkan barang ke keranjang -> Checkout -> Buka akun Penjual di tab/window baru untuk merubah status -> Kembali ke tab Pembeli, status tracking otomatis berubah.
+### Phase 6: Chat System & Notification Center
+**Fokus:** Komunikasi Dua Arah.
+- #### [NEW] `js/services/chatService.js`
+  Membuat *polling* tiruan dan *event listeners* untuk merender UI daftar *chat*, penanda telah dibaca, dan pengiriman pesan.
+
+## Verification Plan
+
+Sesuai SAD, strategi validasi akan difokuskan pada isolasi modul:
+1. **Dependency Audit:** Memastikan *Views* tidak pernah mengakses *Storage Layer* secara langsung (Wajib melewati *API/Service*).
+2. **Performance Audit:** Memastikan perenderan list produk jumlah besar menggunakan *DocumentFragment* untuk mencegah kebocoran memori DOM.
+3. **End-to-End Simulation Check:** Menguji simulasi pesanan menggunakan *Driver*, memverifikasi animasi peta, *chat* dengan penjual, dan keamanan rute (Pencegahan *Buyer* masuk ke tautan *Seller*).

@@ -1,4 +1,21 @@
 /* ── BASE RESET ────────────────────────────────────────── */
+:root {
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 40px;
+    --space-6: 48px;
+    
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+    
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 300ms ease-in-out;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 /* ── SCROLLBAR UTILITIES ───────────────────────────────── */
