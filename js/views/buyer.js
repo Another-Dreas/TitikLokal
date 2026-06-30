@@ -557,14 +557,14 @@ window.TitikLokal.applyVoucher = async () => {
     try {
         const res = await api.applyVoucher(code, currentCheckoutData.subtotal);
         currentCheckoutData.discount = res.discount;
-        msg.innerHTML = `✅ Voucher ${res.code} berhasil digunakan!`;
+        msg.innerHTML = `Voucher ${res.code} berhasil digunakan!`;
         msg.className = 'text-xs font-semibold mt-2 text-success block';
         document.getElementById('display-discount-row').classList.remove('hidden');
         document.getElementById('display-discount').innerText = `-${formatRupiah(res.discount)}`;
         updateCheckoutTotal();
     } catch(e) {
         currentCheckoutData.discount = 0;
-        msg.innerHTML = `❌ ${e.message}`;
+        msg.innerHTML = `${e.message}`;
         msg.className = 'text-xs font-semibold mt-2 text-error block';
         document.getElementById('display-discount-row').classList.add('hidden');
         updateCheckoutTotal();
@@ -729,11 +729,11 @@ window.TitikLokal.showReviewModal = (shopId, productId) => {
             <p class="text-sm text-slate-500 mb-6">Bagaimana kualitas produk dan pelayanan UMKM ini?</p>
             
             <div class="star-rating justify-center mb-6">
-                <input type="radio" name="rating" id="star5" value="5" class="hidden"><label for="star5">★</label>
-                <input type="radio" name="rating" id="star4" value="4" class="hidden"><label for="star4">★</label>
-                <input type="radio" name="rating" id="star3" value="3" class="hidden"><label for="star3">★</label>
-                <input type="radio" name="rating" id="star2" value="2" class="hidden"><label for="star2">★</label>
-                <input type="radio" name="rating" id="star1" value="1" class="hidden"><label for="star1">★</label>
+                <input type="radio" name="rating" id="star5" value="5" class="hidden"><label for="star5"><svg class="w-6 h-6 inline-block cursor-pointer text-slate-300 hover:text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></label>
+                <input type="radio" name="rating" id="star4" value="4" class="hidden"><label for="star4"><svg class="w-6 h-6 inline-block cursor-pointer text-slate-300 hover:text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></label>
+                <input type="radio" name="rating" id="star3" value="3" class="hidden"><label for="star3"><svg class="w-6 h-6 inline-block cursor-pointer text-slate-300 hover:text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></label>
+                <input type="radio" name="rating" id="star2" value="2" class="hidden"><label for="star2"><svg class="w-6 h-6 inline-block cursor-pointer text-slate-300 hover:text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></label>
+                <input type="radio" name="rating" id="star1" value="1" class="hidden"><label for="star1"><svg class="w-6 h-6 inline-block cursor-pointer text-slate-300 hover:text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></label>
             </div>
             
             <textarea id="review-text" class="form-input mb-4" rows="3" placeholder="Tulis pengalaman jujur Anda berbelanja di sini..."></textarea>
@@ -916,37 +916,82 @@ export const initProfile = async () => {
         </header>
         
         <div class="p-4 lg:p-8 max-w-3xl mx-auto space-y-6">
-            <div class="flex flex-col items-center justify-center p-6 bg-surface rounded-3xl shadow-card border border-slate-100 text-center">
-                <img src="${user.avatar}" class="w-24 h-24 rounded-full border-4 border-primary-50 shadow-sm mb-4">
-                <h2 class="text-2xl font-bold text-slate-800">${user.name}</h2>
-                <div class="text-sm font-semibold text-slate-500 mt-1">${user.email} | ${user.phone}</div>
-                <button class="mt-6 btn-secondary !py-2 !px-6" onclick="window.TitikLokal.showToast('Fitur Edit Profil Segera Hadir', 'info')">Edit Profil</button>
+            <div class="flex flex-col items-center justify-center p-6 bg-surface rounded-3xl shadow-card border border-slate-100 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-primary-500 to-indigo-600 opacity-20 pointer-events-none"></div>
+                <img src="${user.avatar}" class="w-24 h-24 rounded-full border-4 border-white shadow-md mb-4 relative z-10 object-cover bg-white">
+                <h2 class="text-2xl font-bold text-slate-800 relative z-10">${user.name}</h2>
+                <div class="text-sm font-semibold text-slate-500 mt-1 relative z-10">${user.email} | ${user.phone}</div>
+                <button class="mt-6 btn-secondary !py-2 !px-6 bg-white relative z-10 shadow-sm" onclick="window.TitikLokal.showEditProfileModal()">Edit Profil</button>
             </div>
             
             <div class="space-y-3">
-                <div class="card p-4 hover:border-primary-200 cursor-pointer flex justify-between items-center" onclick="window.TitikLokal.switchView('view-orders')">
-                    <div class="flex items-center gap-3 font-semibold text-slate-700">
-                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
+                <div class="card p-4 hover:border-primary-200 cursor-pointer flex justify-between items-center group" onclick="window.TitikLokal.openOrdersTab()">
+                    <div class="flex items-center gap-3 font-semibold text-slate-700 group-hover:text-primary-600 transition-colors">
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-primary-600 group-hover:text-white transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
                         Riwayat Pesanan
                     </div>
-                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    <svg class="w-5 h-5 text-slate-400 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
-                <div class="card p-4 hover:border-primary-200 cursor-pointer flex justify-between items-center" onclick="window.TitikLokal.switchView('view-wishlist')">
-                    <div class="flex items-center gap-3 font-semibold text-slate-700">
-                        <div class="p-2 bg-red-50 text-red-600 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
+                <div class="card p-4 hover:border-primary-200 cursor-pointer flex justify-between items-center group" onclick="window.TitikLokal.openWishlist()">
+                    <div class="flex items-center gap-3 font-semibold text-slate-700 group-hover:text-error transition-colors">
+                        <div class="p-2 bg-red-50 text-red-600 rounded-lg group-hover:bg-error group-hover:text-white transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
                         Wishlist Saya
                     </div>
-                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    <svg class="w-5 h-5 text-slate-400 group-hover:text-error transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
-                <div class="card p-4 hover:border-primary-200 cursor-pointer flex justify-between items-center hidden lg:flex" onclick="window.TitikLokal.doLogout()">
+                <div class="card p-4 hover:border-red-200 cursor-pointer flex justify-between items-center lg:flex group" onclick="window.TitikLokal.doLogout()">
                     <div class="flex items-center gap-3 font-semibold text-error">
-                        <div class="p-2 bg-red-50 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></div>
+                        <div class="p-2 bg-red-50 rounded-lg group-hover:bg-error group-hover:text-white transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></div>
                         Keluar Akun
                     </div>
                 </div>
             </div>
         </div>
     `;
+};
+
+window.TitikLokal.showEditProfileModal = async () => {
+    const user = await api.getCurrentUser();
+    if (!user) return;
+    
+    const html = `
+        <form id="edit-profile-form" onsubmit="event.preventDefault(); window.TitikLokal.submitEditProfile(this)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Nama Lengkap</label>
+                <input type="text" name="name" class="form-input" value="${user.name}" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Email</label>
+                <input type="email" name="email" class="form-input" value="${user.email}" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Nomor Telepon</label>
+                <input type="tel" name="phone" class="form-input" value="${user.phone}" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Alamat Pengiriman</label>
+                <textarea name="address" class="form-input" rows="3" required>${user.address || ''}</textarea>
+            </div>
+            <button type="submit" class="btn-primary w-full mt-2">Simpan Perubahan</button>
+        </form>
+    `;
+    showModal('modal-generic', 'Edit Profil', html);
+};
+
+window.TitikLokal.submitEditProfile = async (form) => {
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    window.TitikLokal.simulateLoading(btn, originalText, async () => {
+        try {
+            const updates = Object.fromEntries(new FormData(form).entries());
+            await api.updateUser(updates);
+            hideModal('modal-generic');
+            showToast('Profil berhasil diperbarui!', 'success');
+            initProfile(); // re-render profile
+        } catch(e) {
+            showToast(e.message, 'error');
+        }
+    });
 };
 
 

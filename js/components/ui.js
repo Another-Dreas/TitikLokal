@@ -114,16 +114,49 @@ export const switchView = (viewId) => {
     if (main) main.scrollTop = 0;
 };
 
-export const showModal = (modalId) => {
-    const modal = document.getElementById(modalId);
-    if (!modal) return;
-    modal.classList.remove('hidden');
-    requestAnimationFrame(() => {
-        const overlay = modal.querySelector('.modal-overlay');
-        const content = modal.querySelector('.modal-content');
-        if (overlay) overlay.classList.remove('opacity-0');
-        if (content) content.classList.remove('translate-y-full', 'sm:scale-95');
-    });
+export const showModal = (modalId, title, bodyHTML) => {
+    // If title+bodyHTML are provided, create the modal dynamically
+    if (title && bodyHTML) {
+        // Remove existing modal with same id
+        document.getElementById(modalId)?.remove();
+
+        const modal = document.createElement('div');
+        modal.id = modalId;
+        modal.className = 'fixed inset-0 z-[9999] flex items-end sm:items-center justify-center';
+        modal.innerHTML = `
+            <div class="modal-overlay fixed inset-0 bg-black/40 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="window.TitikLokal.hideModal('${modalId}')"></div>
+            <div class="modal-content relative bg-white w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl p-6 pb-8 z-10 transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300 shadow-2xl">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="text-lg font-bold text-slate-900">${title}</h3>
+                    <button class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors" onclick="window.TitikLokal.hideModal('${modalId}')">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                ${bodyHTML}
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                const overlay = modal.querySelector('.modal-overlay');
+                const content = modal.querySelector('.modal-content');
+                if (overlay) overlay.classList.remove('opacity-0');
+                if (content) { content.classList.remove('translate-y-full', 'sm:scale-95'); }
+            });
+        });
+    } else {
+        // Existing DOM modal
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            const overlay = modal.querySelector('.modal-overlay');
+            const content = modal.querySelector('.modal-content');
+            if (overlay) overlay.classList.remove('opacity-0');
+            if (content) content.classList.remove('translate-y-full', 'sm:scale-95');
+        });
+    }
 };
 
 export const hideModal = (modalId) => {
@@ -134,6 +167,6 @@ export const hideModal = (modalId) => {
     if (overlay) overlay.classList.add('opacity-0');
     if (content) content.classList.add('translate-y-full', 'sm:scale-95');
     setTimeout(() => {
-        modal.classList.add('hidden');
+        modal.remove(); // remove entirely (works for both static and dynamic)
     }, 300);
 };

@@ -23,11 +23,31 @@ Object.assign(window.TitikLokal, {
     removeCartItem,
     openCheckout,
     processCheckout,
-    openOrders,
-
+    openHome: async () => {
+        await initBuyerHome();
+        switchView('view-buyer-home');
+        renderBottomNav('home', 'buyer');
+        renderSidebar('buyer', 'home');
+    },
+    openWishlist: async () => {
+        await initWishlist();
+        switchView('view-wishlist');
+        renderBottomNav('wishlist', 'buyer');
+        renderSidebar('buyer', 'wishlist');
+    },
+    openOrdersTab: async () => {
+        await openOrders();
+        renderBottomNav('orders', 'buyer');
+        renderSidebar('buyer', 'orders');
+    },
+    openProfile: async () => {
+        await initProfile();
+        switchView('view-profile');
+        renderBottomNav('profile', 'buyer');
+    },
+    
     initAuth,
     toggleWishlist,
-    openProfile: () => switchView('view-profile'),
     openNotifications,
     doLogout: async () => {
         await api.logout();

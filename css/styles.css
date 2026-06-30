@@ -1,57 +1,148 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ── BASE RESET ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
-@layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-}
+/* ── SCROLLBAR UTILITIES ───────────────────────────────── */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* View transitions */
+/* ── VIEW TRANSITIONS ──────────────────────────────────── */
 .view-section { transition: opacity 0.25s ease; }
 .view-section.hidden { display: none !important; }
 
-/* ── ONBOARDING ─────────────────────────────────────────── */
+/* ── ONBOARDING ────────────────────────────────────────── */
 .onboarding-slide { transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.4s ease; }
 
-/* Animations */
+/* ── KEYFRAMES ─────────────────────────────────────────── */
 @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(0); opacity: 1; }
 }
-
 @keyframes fadeIn {
     from { opacity: 0; }
-    to { opacity: 1; }
+    to   { opacity: 1; }
 }
-
 @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-10px); }
     100% { transform: translateY(0px); }
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
 .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-fade-in  { animation: fadeIn 0.4s ease-out forwards; }
+.animate-float    { animation: float 3s ease-in-out infinite; }
 
-/* Modal overlay transitions */
-.modal-overlay {
-    transition: opacity 0.3s ease;
+/* ── MODAL TRANSITIONS ─────────────────────────────────── */
+.modal-overlay { transition: opacity 0.3s ease; }
+.modal-content { transition: all 0.3s ease; }
+
+/* ══════════════════════════════════════════════════════════
+   COMPONENT CLASSES – btn-primary, btn-secondary, etc.
+   These are used everywhere in inline HTML.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── BUTTONS ───────────────────────────────────────────── */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
 }
-.modal-content {
-    transition: all 0.3s ease;
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px -5px rgba(37,99,235,0.4);
+}
+.btn-primary:active {
+    transform: translateY(0) scale(0.98);
+}
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
-/* Custom Checkbox/Radio */
-.peer:checked ~ .peer-checked\:bg-primary-600 {
-    background-color: #2563eb;
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #334155;
+    background: transparent;
+    border: 2px solid #e2e8f0;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
-.peer:checked ~ .peer-checked\:border-primary-600 {
-    border-color: #2563eb;
+.btn-secondary:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+    transform: translateY(-1px);
 }
+.btn-secondary:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ── SHADOW UTILITY ────────────────────────────────────── */
+.shadow-primary {
+    box-shadow: 0 8px 25px -5px rgba(37, 99, 235, 0.35);
+}
+
+/* ── CARD UTILITY ──────────────────────────────────────── */
+.shadow-card {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+}
+.shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
+}
+
+/* ── TOAST CONTAINER ───────────────────────────────────── */
+#toast-container {
+    position: fixed;
+    bottom: 6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    pointer-events: none;
+    width: 90%;
+    max-width: 400px;
+}
+
+/* ── STAR RATING ───────────────────────────────────────── */
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+}
+.star-rating input:checked ~ label svg,
+.star-rating label:hover svg,
+.star-rating label:hover ~ label svg {
+    color: #facc15; /* text-yellow-400 */
+}
+
+/* ── bg-surface / bg-background tokens (fallback for inline) ── */
+.bg-surface { background-color: #ffffff; }
+.bg-background { background-color: #f8fafc; }
