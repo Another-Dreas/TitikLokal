@@ -7,6 +7,7 @@ const initialState = {
     currentUser: null,
     currentRole: null, // 'buyer', 'seller', 'guest'
     selectedShop: null,
+    sellerShop: null,
     selectedProduct: null,
     cart: { items: [], shopId: null, subtotal: 0 },
     checkout: {

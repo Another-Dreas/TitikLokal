@@ -1,61 +1,53 @@
-# Implementation Plan: TitikLokal V2 (Architecture-Driven)
+# Rencana Redesign Total Seller Dashboard & Perbaikan Bug
 
-Rencana implementasi ini dirancang secara ketat untuk mematuhi **[Functional Requirement Specification (FRS) V2](file:///C:/Users/Another/.gemini/antigravity/brain/fdebef0a-3d58-4227-aca9-c2062d707ac9/frs_titiklokal.md)** dan **[Software Architecture Document (SAD)](file:///C:/Users/Another/.gemini/antigravity/brain/fdebef0a-3d58-4227-aca9-c2062d707ac9/sad_titiklokal.md)**. 
-
-Karena skala proyek yang luar biasa masif dan memiliki arsitektur 5-Layer (Presentation, State, Business Logic, Repository, Storage), pembangunan akan dipecah ke dalam **6 Fase Eksekusi Strategis** dengan melakukan perombakan struktur *folder*.
+## Tujuan
+Memperbaiki *error* DOM (View tidak ditemukan), mengaudit rute aplikasi, dan merombak tampilan Dashboard Penjual (serta halaman-halaman pendukungnya) menjadi sangat sederhana, fokus pada *usability* untuk pemilik UMKM.
 
 ## User Review Required
 
-> [!IMPORTANT]
-> Sesuai SAD, struktur folder proyek saat ini (`js/app.js`, `js/views/`, dll) harus dipecah/dipindahkan ke dalam struktur layer arsitektur (`js/core/`, `js/services/`, `js/components/`).
-> 
-> **Mohon persetujuan akhir Anda:** Jika Anda menyetujui SAD dan rencana restrukturisasi *folder* ini, saya akan langsung memulai **Fase 1**.
+> [!WARNING]
+> Rencana ini akan menghapus banyak elemen "canggih" yang baru saja dibuat di Seller Dashboard sebelumnya, menggantinya dengan antarmuka yang jauh lebih bersih, besar, dan sederhana (Prinsip: *Less is Better*). Seluruh halaman pendukung (Produk, Pesanan, Chat, Profil) juga akan dibangun ulang dengan pendekatan minimalis.
 
----
+## Open Questions
+1. Apakah Anda setuju jika logika untuk halaman Produk, Pesanan, Chat, dan Profil khusus penjual disatukan ke dalam file `js/views/seller.js` agar pengelolaannya lebih terpusat, atau Anda lebih memilih dibuatkan file terpisah (misal: `js/views/seller_orders.js`)? *Untuk rencana ini, saya mengasumsikan penyatuan di `seller.js` demi kesederhanaan struktur file, karena tampilannya sangat minimalis.*
 
-## Proposed Changes (Execution Strategy)
+## Proposed Changes
 
-### Phase 1: Folder Restructuring & Core Infrastructure
-**Fokus:** Membangun *Layer Architecture* dan merombak struktur folder *Frontend*.
-- #### [MODIFY] `index.html` & `css/styles.css`
-  Menyiapkan kontainer *Root* dan *CSS System* (variabel 8pt Grid, Typografi).
-- #### [NEW] Folder System
-  Membuat `js/core/store.js` (State Manager), `js/core/router.js` (Interceptor SPA), dan `js/core/api.js` (Repository Layer).
-- #### [MODIFY] `js/config/data.js` & `js/core/storage.js`
-  Mengekspansi *Database Schema* menjadi 30 Tabel Relasional (menambahkan *Chats*, *Drivers*, *Notifications*).
+### 1. Audit & Perbaikan Struktur DOM (`index.html`)
+- **[MODIFY] `index.html`**:
+  - Menambahkan *container* `<section>` yang hilang untuk mencegah *console error*:
+    - `<section id="view-seller-products" ...>`
+    - `<section id="view-seller-orders" ...>`
+    - `<section id="view-seller-chat" ...>`
+    - `<section id="view-seller-profile" ...>`
 
-### Phase 2: Design System & Reusable Components
-**Fokus:** Mengubah UI manual menjadi UI berbasis fungsi/komponen statis.
-- #### [NEW] `js/components/ui-library.js` & `js/components/cards.js`
-  Menulis fungsi pembuat komponen seperti `Button()`, `AppBar()`, `StoreCard()`, `OrderTracker()`.
-- #### [NEW] `js/utils/formatters.js`
-  Pembuatan alat bantu untuk validasi form, format rupiah, dan algoritma *Debounce*.
+### 2. Perbaikan Routing & Navigasi
+- **[MODIFY] `js/core/router.js`**:
+  - Mendaftarkan rute baru: `view-seller-chat` dan `view-seller-profile` dengan izin akses *role* `'seller'`.
+- **[MODIFY] `js/components/layout.js`**:
+  - Memperbarui `renderBottomNav` khusus penjual menjadi 5 menu: **Dashboard, Produk, Pesanan, Chat, Profil**.
+- **[MODIFY] `js/app.js`**:
+  - Mendaftarkan fungsi *listener* untuk memanggil render UI saat rute berpindah (misal: memanggil `initSellerProducts()` saat rute `view-seller-products` aktif).
 
-### Phase 3: "Jelajah Sekitar Saya" & Map Integration
-**Fokus:** Mengintegrasikan Leaflet JS sebagai fitur *Core Explorer*.
-- #### [NEW] `js/services/mapService.js`
-  Lapisan *Business Logic* untuk menangani klaster *marker*, perhitungan radius, dan sinkronisasi dengan *UI Layer*.
-- #### [MODIFY] `js/views/buyer.js`
-  Merekonstruksi *Homepage Buyer* dengan konsep personalisasi (*Greeting*, *Recent Viewed*).
+### 3. Redesign Dashboard Utama (`js/views/seller.js`)
+- Merombak fungsi `renderSellerDashboard` menjadi sangat minimalis:
+  - **Header**: Foto, Nama, Status (Buka/Tutup), Tombol Edit Profil.
+  - **Ringkasan**: 4 kartu (Pesanan Baru, Diproses, Pendapatan, Produk Aktif) dengan ukuran besar.
+  - **Quick Action**: 6 ikon besar (Tambah Produk, Daftar Produk, Pesanan, Chat Pembeli, Promosi, Keuangan).
+  - **Statistik**: 1 Grafik (7 Hari) & 1 Angka Total Pendapatan.
 
-### Phase 4: The 15-Step Checkout Service
-**Fokus:** Simulasi Transaksi tingkat lanjut.
-- #### [NEW] `js/services/checkoutService.js` & `js/views/checkout.js`
-  Membangun logika kalkulasi jarak, harga ongkir dinamis, dan seleksi *Driver* Instan. Semua akan dilindungi oleh *Error Boundary*.
+### 4. Pembuatan Halaman Pendukung (Minimalis)
+Di dalam `js/views/seller.js`, akan ditambahkan fungsi-fungsi render baru:
+- **`initSellerProducts()`**: Menampilkan *search bar*, daftar produk (Foto, Nama, Harga, Stok, Status), tombol titik tiga (opsi: Edit, Nonaktifkan, Hapus), dan tombol melayang (FAB) Tambah Produk.
+- **`initSellerOrders()`**: Menampilkan *Tabs* (Baru, Diproses, Dikirim, Selesai) dengan *list card* pesanan yang sangat simpel.
+- **`initSellerChat()`**: Menampilkan riwayat *chat* dengan penanda belum dibaca. (Data akan di-*mock* menggunakan struktur *toast* "Fitur segera hadir" untuk interaksinya jika belum ada *realtime engine*).
+- **`initSellerProfile()`**: Menampilkan *list menu* (Informasi Toko, Jam, Alamat, Rekening, Pengiriman, Logout) bergaya *Settings* di Android/iOS.
 
-### Phase 5: Seller CMS & Real-Time Sync
-**Fokus:** Dashboard Penjual dan Sinkronisasi *State*.
-- #### [MODIFY] `js/views/seller.js`
-  Menyuntikkan analitik *dummy*, kanban *Orders*, manajemen katalog produk, dan tombol fungsi "Preview Mode" (Desktop/Tablet/Mobile *Viewport Simulation*).
-
-### Phase 6: Chat System & Notification Center
-**Fokus:** Komunikasi Dua Arah.
-- #### [NEW] `js/services/chatService.js`
-  Membuat *polling* tiruan dan *event listeners* untuk merender UI daftar *chat*, penanda telah dibaca, dan pengiriman pesan.
+### 5. Cleanup
+- Menghapus komponen, kode *chart*, dan *layout* yang tidak terpakai dari versi dashboard sebelumnya untuk menghemat memori.
 
 ## Verification Plan
-
-Sesuai SAD, strategi validasi akan difokuskan pada isolasi modul:
-1. **Dependency Audit:** Memastikan *Views* tidak pernah mengakses *Storage Layer* secara langsung (Wajib melewati *API/Service*).
-2. **Performance Audit:** Memastikan perenderan list produk jumlah besar menggunakan *DocumentFragment* untuk mencegah kebocoran memori DOM.
-3. **End-to-End Simulation Check:** Menguji simulasi pesanan menggunakan *Driver*, memverifikasi animasi peta, *chat* dengan penjual, dan keamanan rute (Pencegahan *Buyer* masuk ke tautan *Seller*).
+1. Buka aplikasi dan *login* sebagai penjual.
+2. Periksa *Console* peramban: pastikan tidak ada pesan "View view-seller-products not found in DOM".
+3. Uji coba mengklik semua tombol di *Bottom Navigation* (Dashboard, Produk, Pesanan, Chat, Profil). Pastikan semuanya memuat halaman tanpa layar putih/kosong.
+4. Pada setiap tombol yang belum memiliki fungsionalitas (seperti "Tambah Produk" atau "Pengaturan Rekening"), pastikan akan muncul *Toast* "Fitur ini akan segera hadir" alih-alih menyebabkan *error*.

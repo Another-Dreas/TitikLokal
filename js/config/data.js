@@ -395,6 +395,34 @@ export const initialData = {
             price: 350000, stock: 10, categoryId: 'cat_jasa', status: true,
             images: [{ imgUrl: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400&q=80', isPrimary: true }],
             totalSold: 120, rating: 4.9, reviews: 65, weight: 0
+        },
+        {
+            id: 'p18', shopId: 'toko_09', name: 'Ting-Ting Kacang Asli Siantar',
+            description: 'Cemilan manis dan gurih khas Siantar, dibuat dari kacang pilihan dan gula berkualitas. Cocok untuk oleh-oleh keluarga.',
+            price: 35000, stock: 50, categoryId: 'cat_kuliner', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400&q=80', isPrimary: true }],
+            totalSold: 845, rating: 4.8, reviews: 156, weight: 300
+        },
+        {
+            id: 'p19', shopId: 'toko_09', name: 'Sirup Markisa Asli Simalungun',
+            description: 'Sirup buah markisa murni tanpa pemanis buatan. Rasanya asam manis menyegarkan, oleh-oleh wajib khas Sumatera Utara.',
+            price: 65000, stock: 40, categoryId: 'cat_kuliner', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400&q=80', isPrimary: true }],
+            totalSold: 1102, rating: 4.9, reviews: 290, weight: 800
+        },
+        {
+            id: 'p20', shopId: 'toko_02', name: 'Gantungan Kunci Motif Ulos',
+            description: 'Gantungan kunci cantik dengan paduan motif ulos asli dan kayu ukir. Pilihan souvenir kerajinan khas lokal yang menarik.',
+            price: 15000, stock: 120, categoryId: 'cat_kriya', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1531835551805-16d864c8d311?w=400&q=80', isPrimary: true }],
+            totalSold: 420, rating: 4.6, reviews: 85, weight: 50
+        },
+        {
+            id: 'p21', shopId: 'toko_02', name: 'Syal Tenun Ulos Batak',
+            description: 'Syal tenun tangan motif Batak yang elegan dan hangat. Dapat digunakan untuk acara formal maupun aksesoris sehari-hari.',
+            price: 125000, stock: 25, categoryId: 'cat_kriya', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1604762433015-bc8399580df7?w=400&q=80', isPrimary: true }],
+            totalSold: 215, rating: 4.8, reviews: 92, weight: 200
         }
     ],
 
@@ -448,10 +476,21 @@ export const initialData = {
     wishlist_items: [],
 
     reviews: [
-        { id: 'rev_1', productId: 'p1', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Rotinya enak banget! Lembut dan legit, sudah langganan sejak lama.', sellerReply: 'Terima kasih kak, semoga selalu puas!', createdAt: new Date(Date.now() - 172800000).toISOString() },
-        { id: 'rev_2', productId: 'p7', userId: 'u_1', shopId: 'toko_03', rating: 5, comment: 'Baksonya juara! Kuahnya segar, baksonya kenyal. Recommended!', sellerReply: '', createdAt: new Date(Date.now() - 86400000).toISOString() },
-        { id: 'rev_3', productId: 'p4', userId: 'u_2', shopId: 'toko_02', rating: 5, comment: 'Kualitas ulosnya sangat bagus, motif tradisionalnya indah. Pengiriman cepat.', sellerReply: 'Terima kasih kak, semoga bermanfaat!', createdAt: new Date(Date.now() - 43200000).toISOString() },
-        { id: 'rev_4', productId: 'p9', userId: 'u_1', shopId: 'toko_04', rating: 4, comment: 'Kopinya harum sekali, rasa arabikanya kuat. Suka!', sellerReply: '', createdAt: new Date(Date.now() - 21600000).toISOString() }
+        // ── toko_01: Roti Ganda Siantar (seller test account) ──────────────────
+        { id: 'rev_1',  productId: 'p1', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Rotinya enak banget! Lembut dan legit, sudah langganan sejak lama. Setiap pagi pasti beli sini deh.', sellerReply: 'Terima kasih banyak kak Budi! Senang sekali bisa jadi pilihan sarapan keluarga. Sampai jumpa besok pagi ya!', createdAt: new Date(Date.now() - 172800000).toISOString() },
+        { id: 'rev_5',  productId: 'p2', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Roti isi coklat kejunya melimpah banget, anak-anak suka banget! Kemarin beli 2 bungkus langsung habis. Highly recommended!', sellerReply: '', createdAt: new Date(Date.now() - 3600000).toISOString() },
+        { id: 'rev_6',  productId: 'p3', userId: 'u_2', shopId: 'toko_01', rating: 4, comment: 'Bolu gulungnya enak tapi menurut saya sedikit terlalu manis. Teksturnya lembut banget sih, mungkin next time minta yang versi less sugar.', sellerReply: '', createdAt: new Date(Date.now() - 7200000).toISOString() },
+        { id: 'rev_7',  productId: 'p1', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Sudah jadi oleh-oleh favorit saya kalau dari Siantar. Dibawa ke Jakarta masih enak dan tahan 3 hari. Packagingnya juga rapi.', sellerReply: '', createdAt: new Date(Date.now() - 10800000).toISOString() },
+        { id: 'rev_8',  productId: 'p2', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Pesenan saya cepat banget diproses. Roti masih hangat waktu sampai, isinya penuh tidak pelit. Penjual ramah dan responsif juga.', sellerReply: 'Wah terima kasih kak! Kami selalu usahakan kirim selagi hangat. Senang bisa melayani!', createdAt: new Date(Date.now() - 86400000).toISOString() },
+        { id: 'rev_9',  productId: 'p3', userId: 'u_1', shopId: 'toko_01', rating: 4, comment: 'Bolu gulung pandannya harum banget, krimnya tidak terlalu berat. Cocok untuk teman ngopi pagi. Ukurannya cukup besar untuk harganya.', sellerReply: '', createdAt: new Date(Date.now() - 14400000).toISOString() },
+        { id: 'rev_10', productId: 'p1', userId: 'u_2', shopId: 'toko_01', rating: 3, comment: 'Rotinya masih enak tapi kali ini terasa agak kurang empuk dibanding biasanya. Mungkin karena saya ambil sore hari jadi kurang fresh? Tetap akan balik lagi kok.', sellerReply: '', createdAt: new Date(Date.now() - 18000000).toISOString() },
+        { id: 'rev_11', productId: 'p2', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Kualitasnya konsisten! Sudah berlangganan hampir 2 tahun, tidak pernah kecewa. Roti isi kejunya selalu juara. Teruskan ya kak!', sellerReply: '', createdAt: new Date(Date.now() - 21600000).toISOString() },
+        { id: 'rev_12', productId: 'p3', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Saya pesan buat ulang tahun ponakan, dikemas cantik dan rapi sekali. Rasanya juga tidak mengecewakan. Pasti order lagi untuk acara berikutnya!', sellerReply: '', createdAt: new Date(Date.now() - 43200000).toISOString() },
+
+        // ── toko lain (untuk kelengkapan data) ───────────────────────────────
+        { id: 'rev_2',  productId: 'p7',  userId: 'u_1', shopId: 'toko_03', rating: 5, comment: 'Baksonya juara! Kuahnya segar, baksonya kenyal. Recommended!', sellerReply: '', createdAt: new Date(Date.now() - 86400000).toISOString() },
+        { id: 'rev_3',  productId: 'p4',  userId: 'u_2', shopId: 'toko_02', rating: 5, comment: 'Kualitas ulosnya sangat bagus, motif tradisionalnya indah. Pengiriman cepat.', sellerReply: 'Terima kasih kak, semoga bermanfaat!', createdAt: new Date(Date.now() - 43200000).toISOString() },
+        { id: 'rev_4',  productId: 'p9',  userId: 'u_1', shopId: 'toko_04', rating: 4, comment: 'Kopinya harum sekali, rasa arabikanya kuat. Suka!', sellerReply: '', createdAt: new Date(Date.now() - 21600000).toISOString() }
     ],
 
     vouchers: [

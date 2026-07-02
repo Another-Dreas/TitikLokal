@@ -9,16 +9,16 @@
         content="Platform UMKM lokal terpercaya. Temukan, beli, dan jual produk lokal di sekitar Anda.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
                     colors: {
-                        primary: { 50: '#eff6ff', 100: '#dbeafe', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
                         secondary: { 500: '#06b6d4' },
                         accent: { 500: '#f59e0b' },
                         success: '#10b981', error: '#ef4444',
@@ -26,7 +26,8 @@
                     },
                     boxShadow: {
                         soft: '0 4px 20px -2px rgba(0,0,0,0.05)',
-                        card: '0 1px 3px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1)'
+                        card: '0 1px 3px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1)',
+                        primary: '0 8px 24px -4px rgba(37,99,235,0.35)'
                     }
                 }
             }
@@ -48,11 +49,11 @@
     
     <script>
         // Auto-reset jika versi data berubah
-        const DATA_VERSION = 'v4_siantar';
+        const DATA_VERSION = 'v5_siantar';
         if (localStorage.getItem('titiklokal_data_version') !== DATA_VERSION) {
             localStorage.removeItem('titiklokal_db_v3');
             localStorage.setItem('titiklokal_data_version', DATA_VERSION);
-            console.log('[TitikLokal] Data direset ke versi Pematang Siantar.');
+            console.log('[TitikLokal] Data direset ke versi Pematang Siantar v5.');
         }
     </script>
     <script>
@@ -239,41 +240,47 @@
             <!-- BUYER HOME -->
             <section id="view-buyer-home" class="view-section hidden min-h-screen pb-24 lg:pb-8">
 
-                <!-- ── HEADER (Non-sticky, above search bar) ── -->
-                <div class="bg-gradient-to-br from-primary-600 to-primary-700 px-4 pt-5 pb-14 lg:hidden">
-                    <div class="flex items-start justify-between">
-                        <!-- Location Info -->
-                        <div class="flex flex-col gap-0.5" id="buyer-location-selector">
-                            <div class="flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-primary-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <span class="text-[10px] text-primary-200 font-medium uppercase tracking-widest">Lokasi Kamu</span>
+                <!-- ── HEADER MOBILE (Premium Gradient) ── -->
+                <div class="relative lg:hidden overflow-hidden" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #3b82f6 70%, #0ea5e9 100%)">
+                    <!-- Decorative blobs -->
+                    <div class="absolute -top-8 -right-8 w-40 h-40 rounded-full opacity-10" style="background: rgba(255,255,255,0.4)"></div>
+                    <div class="absolute -bottom-10 -left-10 w-56 h-56 rounded-full opacity-10" style="background: rgba(255,255,255,0.3)"></div>
+                    <div class="absolute top-6 right-20 w-16 h-16 rounded-full opacity-10" style="background: rgba(255,255,255,0.5)"></div>
+
+                    <div class="relative z-10 px-4 pt-5 pb-14">
+                        <div class="flex items-start justify-between">
+                            <!-- Location Info -->
+                            <div class="flex flex-col gap-0.5" id="buyer-location-selector">
+                                <div class="flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-blue-200 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                    </svg>
+                                    <span class="text-[9px] text-blue-200 font-semibold uppercase tracking-[0.15em]">Lokasi Kamu</span>
+                                </div>
+                                <div class="flex items-center gap-1 mt-0.5">
+                                    <span id="current-location-text" class="text-white font-extrabold text-xl leading-tight tracking-tight">Pematang Siantar</span>
+                                    <svg class="w-4 h-4 text-blue-300 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <span id="nearby-umkm-count-text" class="text-blue-200 text-xs font-medium mt-0.5">Memuat...</span>
                             </div>
+                            <!-- Notif + Cart + Avatar -->
                             <div class="flex items-center gap-1">
-                                <span id="current-location-text" class="text-white font-bold text-base leading-tight">Pematang Siantar</span>
-                                <svg class="w-3.5 h-3.5 text-primary-200 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
+                                <button id="btn-notif" class="relative p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" onclick="window.TitikLokal.openNotifications()">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                    <span id="notif-badge" class="absolute top-1 right-1 bg-red-400 text-white text-[9px] font-bold w-4 h-4 rounded-full items-center justify-center hidden">0</span>
+                                </button>
+                                <button class="relative p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" id="btn-buyer-cart" onclick="window.TitikLokal.openCart()">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                    </svg>
+                                    <span id="cart-badge" class="absolute top-1 right-1 bg-red-400 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+                                </button>
+                                <div id="buyer-avatar-desktop" class="w-9 h-9 rounded-full bg-white/20 border-2 border-white/40 overflow-hidden ml-1 cursor-pointer hover:border-white/70 transition-all" onclick="window.TitikLokal.openProfile()"></div>
                             </div>
-                            <span id="nearby-umkm-count-text" class="text-primary-200 text-xs font-medium">Memuat...</span>
-                        </div>
-                        <!-- Notif + Cart + Avatar -->
-                        <div class="flex items-center gap-1">
-                            <button id="btn-notif" class="relative p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-colors" onclick="window.TitikLokal.openNotifications()">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                </svg>
-                                <span id="notif-badge" class="absolute top-1 right-1 bg-red-400 text-white text-[9px] font-bold w-4 h-4 rounded-full items-center justify-center hidden">0</span>
-                            </button>
-                            <button class="relative p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-colors" id="btn-buyer-cart" onclick="window.TitikLokal.openCart()">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                </svg>
-                                <span id="cart-badge" class="absolute top-1 right-1 bg-red-400 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
-                            </button>
-                            <div id="buyer-avatar-desktop" class="w-8 h-8 rounded-full bg-white/20 border border-white/30 overflow-hidden ml-1 cursor-pointer" onclick="window.TitikLokal.openProfile()"></div>
                         </div>
                     </div>
                 </div>
@@ -325,7 +332,7 @@
                 </div>
 
                 <!-- ── MAIN CONTENT ── -->
-                <div class="px-4 pt-4 pb-4 lg:px-8 lg:pt-6 space-y-6 max-w-5xl mx-auto">
+                <div class="px-4 pt-4 pb-4 lg:px-8 lg:pt-6 space-y-8 max-w-5xl mx-auto">
 
                     <!-- Banner Carousel -->
                     <div id="promo-banner-container"></div>
@@ -338,22 +345,67 @@
                         <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x" id="category-container"></div>
                     </div>
 
-                    <!-- Nearby UMKM -->
+                    <!-- UMKM Terdekat -->
                     <div>
                         <div class="flex justify-between items-end mb-3">
                             <div>
-                                <h3 class="font-bold text-slate-800 text-base tracking-tight">Di Sekitar Kamu</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Dukung bisnis di <span class="font-semibold text-primary-600" id="nearby-location-text"></span></p>
+                                <h3 class="font-extrabold text-slate-800 text-base tracking-tight">UMKM Terdekat</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Di area <span class="font-semibold text-primary-600" id="nearby-location-text"></span></p>
                             </div>
-                            <button class="text-primary-600 text-xs font-semibold hover:text-primary-700 flex items-center gap-1 bg-primary-50 px-3 py-1.5 rounded-xl transition-colors" onclick="window.TitikLokal.openMap()">
-                                Lihat Peta
+                            <button id="btn-lihat-semua-umkm" class="text-primary-600 text-xs font-bold hover:text-primary-700 flex items-center gap-1 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-xl transition-colors" onclick="window.TitikLokal.openMap()">
+                                Lihat Semua
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                 </svg>
                             </button>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="nearby-umkm-container"></div>
+                        <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide" id="nearby-umkm-container"></div>
                     </div>
+
+                    <!-- Produk Lokal Terlaris -->
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-base tracking-tight">Produk Lokal Terlaris</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Berdasarkan penjualan dan rating terbaik</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" id="top-products-container"></div>
+                    </div>
+
+                    <!-- Oleh-Oleh Daerah -->
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-base tracking-tight">Oleh-Oleh Daerah</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Khas <span class="font-semibold text-amber-600" id="souvenir-location-text">Pematang Siantar</span></p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" id="souvenirs-container"></div>
+                    </div>
+
+                    <!-- Makanan Khas -->
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-base tracking-tight">Makanan Khas</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Kuliner autentik dari UMKM lokal</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" id="local-food-container"></div>
+                    </div>
+
+                    <!-- Kerajinan Lokal -->
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-base tracking-tight">Kerajinan Lokal</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Karya tangan pengrajin UMKM Siantar</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" id="local-crafts-container"></div>
+                    </div>
+
                 </div>
 
                 <!-- FAB Map Button -->
@@ -415,8 +467,19 @@
             <section id="view-chat-room" class="view-section hidden min-h-screen flex flex-col bg-background"></section>
 
             <!-- SELLER DASHBOARD -->
-            <section id="view-seller-dashboard" class="view-section hidden min-h-screen pb-24 bg-background lg:p-8">
-            </section>
+            <section id="view-seller-dashboard" class="view-section hidden min-h-screen pb-24 bg-background lg:p-8"></section>
+
+            <!-- SELLER PRODUCTS -->
+            <section id="view-seller-products" class="view-section hidden min-h-screen pb-24 bg-background lg:p-8"></section>
+
+            <!-- SELLER ORDERS -->
+            <section id="view-seller-orders" class="view-section hidden min-h-screen pb-24 bg-background lg:p-8"></section>
+
+            <!-- SELLER CHAT -->
+            <section id="view-seller-chat" class="view-section hidden min-h-screen pb-24 bg-background lg:p-8"></section>
+
+            <!-- SELLER PROFILE -->
+            <section id="view-seller-profile" class="view-section hidden min-h-screen pb-24 bg-background lg:p-8"></section>
 
             <!-- ADMIN DASHBOARD -->
             <section id="view-admin-dashboard" class="view-section hidden min-h-screen pb-24 bg-background lg:p-8">

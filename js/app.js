@@ -12,7 +12,7 @@ import { formatters } from './utils/formatters.js';
 import { mapService } from './services/mapService.js';
 import { initBuyerHome, initExploreMap, initProfile, initOrders, initWishlist, initShopProfile } from './views/buyer.js';
 import { initAuth } from './views/auth.js';
-import { initSellerDashboard } from './views/seller.js';
+import { initSellerDashboard, initSellerProducts, initSellerOrders, initSellerChat, initSellerProfile } from './views/seller.js';
 import { initCart } from './views/cart.js';
 import { initCheckout } from './views/checkout.js';
 
@@ -75,6 +75,18 @@ Object.assign(window.TitikLokal, {
                     </div>`).join('');
             ui.showModal('Notifikasi', html);
         });
+    },
+
+    addToCart: async (productId) => {
+        const user = store.getState().currentUser;
+        if (!user) { ui.showToast('Silakan login terlebih dahulu', 'info'); return; }
+        try {
+            await api.addToCart(user.id, productId, 1);
+            ui.showToast('Ditambahkan ke keranjang!', 'success');
+            window.TitikLokal.updateCartBadge();
+        } catch (e) {
+            ui.showToast(e.message || 'Gagal menambah ke keranjang', 'error');
+        }
     }
 });
 
@@ -127,6 +139,26 @@ document.addEventListener('DOMContentLoaded', () => {
             initCheckout();
         } else if (v === 'view-shop-profile') {
             if (payload) initShopProfile(payload);
+        } else if (v === 'view-seller-dashboard') {
+            initSellerDashboard();
+            layout.renderBottomNav('dashboard', 'seller');
+            layout.renderSidebar('seller', 'dashboard');
+        } else if (v === 'view-seller-products') {
+            initSellerProducts();
+            layout.renderBottomNav('products', 'seller');
+            layout.renderSidebar('seller', 'products');
+        } else if (v === 'view-seller-orders') {
+            initSellerOrders();
+            layout.renderBottomNav('orders', 'seller');
+            layout.renderSidebar('seller', 'orders');
+        } else if (v === 'view-seller-chat') {
+            initSellerChat();
+            layout.renderBottomNav('chat', 'seller');
+            layout.renderSidebar('seller', 'chat');
+        } else if (v === 'view-seller-profile') {
+            initSellerProfile();
+            layout.renderBottomNav('profile', 'seller');
+            layout.renderSidebar('seller', 'profile');
         }
     });
 });

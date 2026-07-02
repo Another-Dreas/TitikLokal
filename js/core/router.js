@@ -15,7 +15,7 @@ const routes = {
     // Buyer
     'view-buyer-home': { auth: true, roles: ['buyer', 'guest'] },
     'view-explore-map': { auth: true, roles: ['buyer', 'guest'] },
-    'view-shop-profile': { auth: true, roles: ['buyer', 'guest'] },
+    'view-shop-profile': { auth: true, roles: ['buyer', 'guest', 'seller'] },
     'view-auth': { auth: false },
     'view-wishlist': { auth: true, roles: ['buyer'] },
     'view-cart': { auth: true, roles: ['buyer'] },
@@ -28,6 +28,8 @@ const routes = {
     'view-seller-dashboard': { auth: true, roles: ['seller'] },
     'view-seller-products': { auth: true, roles: ['seller'] },
     'view-seller-orders': { auth: true, roles: ['seller'] },
+    'view-seller-chat': { auth: true, roles: ['seller'] },
+    'view-seller-profile': { auth: true, roles: ['seller'] },
 };
 
 let viewHistory = [];

@@ -71,6 +71,21 @@ export const api = {
         return shop;
     },
 
+    getShopReviews: async (shopId) => {
+        await delay(200);
+        const reviews = storage.get('reviews') || [];
+        const products = storage.get('products') || [];
+        const users = storage.get('users') || [];
+        return reviews
+            .filter(r => r.shopId === shopId)
+            .map(r => ({
+                ...r,
+                productName: (products.find(p => p.id === r.productId) || {}).name || 'Produk Tidak Ditemukan',
+                userName: (users.find(u => u.id === r.userId) || {}).name || 'Pengguna'
+            }))
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    },
+
     getShopsByOwnerId: async (ownerId) => {
         await delay(200);
         return storage.findMany('shops', s => s.ownerId === ownerId);
@@ -82,6 +97,11 @@ export const api = {
     },
 
     // ── PRODUCTS ──────────────────────────────────────────────
+    getAllProducts: async () => {
+        await delay(200);
+        return storage.get('products');
+    },
+
     getProductsByShop: async (shopId) => {
         await delay(200);
         return storage.findMany('products', p => p.shopId === shopId);
@@ -489,6 +509,13 @@ export const api = {
         storage.updateById('shops', reviewData.shopId, { rating: parseFloat(avgRating.toFixed(1)), totalReviews: shopReviews.length });
 
         return review;
+    },
+
+    replyReview: async (reviewId, replyText) => {
+        await delay(300);
+        const review = storage.findOne('reviews', r => r.id === reviewId);
+        if (!review) throw new Error('Ulasan tidak ditemukan.');
+        return storage.updateById('reviews', reviewId, { sellerReply: replyText });
     },
 
     // ── WISHLIST ──────────────────────────────────────────────

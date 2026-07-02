@@ -48,6 +48,14 @@ export const layout = {
                         <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                         <span class="text-[10px] font-medium">Pesanan</span>
                     </button>
+                    <button class="flex flex-col items-center justify-center w-full h-full ${activeTab === 'chat' ? 'text-primary-600' : 'text-slate-400'}" onclick="window.TitikLokal.router.navigate('view-seller-chat')">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        <span class="text-[10px] font-medium">Chat</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center w-full h-full ${activeTab === 'profile' ? 'text-primary-600' : 'text-slate-400'}" onclick="window.TitikLokal.router.navigate('view-seller-profile')">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <span class="text-[10px] font-medium">Profil</span>
+                    </button>
                 </div>
             `;
         }
@@ -113,21 +121,25 @@ export const layout = {
                     </a>
                     <a href="#" class="flex items-center gap-3 px-3 py-2.5 ${activeTab === 'products' ? 'bg-slate-100 text-slate-900' : 'text-slate-600 hover:bg-slate-50'} rounded-xl font-semibold transition-colors" onclick="window.TitikLokal.router.navigate('view-seller-products')">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                        Manajemen Produk
+                        Produk
                     </a>
                     <a href="#" class="flex items-center gap-3 px-3 py-2.5 ${activeTab === 'orders' ? 'bg-slate-100 text-slate-900' : 'text-slate-600 hover:bg-slate-50'} rounded-xl font-semibold transition-colors" onclick="window.TitikLokal.router.navigate('view-seller-orders')">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                        Pesanan Masuk
+                        Pesanan
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-50 rounded-xl font-semibold transition-colors mt-8 border border-slate-200" onclick="window.TitikLokal.ui.showToast('Preview Mode Aktif', 'info')">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                        Preview Toko
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 ${activeTab === 'chat' ? 'bg-slate-100 text-slate-900' : 'text-slate-600 hover:bg-slate-50'} rounded-xl font-semibold transition-colors" onclick="window.TitikLokal.router.navigate('view-seller-chat')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        Chat
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 ${activeTab === 'profile' ? 'bg-slate-100 text-slate-900' : 'text-slate-600 hover:bg-slate-50'} rounded-xl font-semibold transition-colors" onclick="window.TitikLokal.router.navigate('view-seller-profile')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        Profil
                     </a>
                 </nav>
                 
                 <div class="mt-auto border-t border-slate-100 pt-4">
                     <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-error hover:bg-red-50 rounded-xl font-semibold transition-colors" onclick="window.TitikLokal.store.dispatch('LOGOUT'); window.TitikLokal.router.navigate('view-splash')">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         Keluar Akun
                     </a>
                 </div>

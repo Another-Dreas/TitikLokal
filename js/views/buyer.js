@@ -15,7 +15,6 @@ export const initBuyerHome = async () => {
     try {
         const user = store.getState().currentUser;
         if (user) {
-            // Desktop name + avatar
             const nameEl = document.getElementById('buyer-name-desktop');
             const avatarElMobile = document.getElementById('buyer-avatar-desktop');
             const avatarElDesktop = document.getElementById('buyer-avatar-desktop-lg');
@@ -24,22 +23,36 @@ export const initBuyerHome = async () => {
             if (avatarElDesktop) avatarElDesktop.innerHTML = `<img src="${user.avatar}" class="w-full h-full object-cover">`;
         }
 
-        // Location text
+        // Location texts
         const locEl = document.getElementById('current-location-text');
         if (locEl) locEl.innerText = 'Pematang Siantar';
         const nearbyLocEl = document.getElementById('nearby-location-text');
         if (nearbyLocEl) nearbyLocEl.innerText = 'Pematang Siantar';
+        const souvenirLocEl = document.getElementById('souvenir-location-text');
+        if (souvenirLocEl) souvenirLocEl.innerText = 'Pematang Siantar';
 
-        // Load UMKM count for header
-        const shops = await api.getShops();
+        // Fetch all data once
+        const [shops, allProducts] = await Promise.all([
+            api.getShops(),
+            api.getAllProducts()
+        ]);
+
+        // Update UMKM count in header
         const umkmCountEl = document.getElementById('nearby-umkm-count-text');
         if (umkmCountEl) umkmCountEl.innerText = `${shops.length} UMKM di sekitar Anda`;
 
-        await renderPromoBanner();
-        await renderCategories();
-        await renderRecommendedShops();
+        // Render all sections concurrently
+        await Promise.all([
+            renderPromoBanner(),
+            renderCategories(),
+            renderNearbyUMKM(shops, allProducts),
+            renderTopProducts(allProducts, shops),
+            renderSouvenirs(allProducts, shops),
+            renderLocalFood(allProducts, shops),
+            renderLocalCrafts(allProducts, shops),
+        ]);
     } catch (err) {
-        console.error(err);
+        console.error('[initBuyerHome] Error:', err);
     } finally {
         store.dispatch('isLoading', false);
     }
@@ -71,23 +84,117 @@ const renderCategories = async () => {
     `).join('');
 };
 
-const renderRecommendedShops = async () => {
+// Souvenir shop IDs — toko yang menjual oleh-oleh khas daerah
+const SOUVENIR_SHOP_IDS = ['toko_09'];
+const FOOD_CATEGORY = 'cat_kuliner';
+const CRAFT_CATEGORY = 'cat_kriya';
+const USER_CITY = 'Pematang Siantar';
+
+const renderNearbyUMKM = async (allShops, allProducts) => {
     const container = document.getElementById('nearby-umkm-container');
     if (!container) return;
 
-    const shops = await api.getShops();
     const userLat = 2.9595;
     const userLng = 99.0690;
 
+    // Build product count map
+    const productCountMap = {};
+    allProducts.forEach(p => {
+        productCountMap[p.shopId] = (productCountMap[p.shopId] || 0) + 1;
+    });
+
+    // Sort by distance
+    const sorted = allShops
+        .map(shop => ({
+            shop,
+            dist: formatters.calculateDistance(userLat, userLng, shop.coords[0], shop.coords[1])
+        }))
+        .sort((a, b) => a.dist - b.dist)
+        .slice(0, 8);
+
     let html = '';
-    const shopsToShow = shops.slice(0, 10);
-    shopsToShow.forEach(shop => {
-        const dist = formatters.calculateDistance(userLat, userLng, shop.coords[0], shop.coords[1]);
-        html += window.TitikLokal.cards.StoreCard(shop, dist);
+    sorted.forEach(({ shop, dist }) => {
+        html += window.TitikLokal.cards.StoreCard(shop, dist, productCountMap[shop.id] || 0);
     });
 
     container.innerHTML = html || window.TitikLokal.ui.EmptyState('Belum ada UMKM di area ini.');
 };
+
+const renderTopProducts = async (allProducts, allShops) => {
+    const container = document.getElementById('top-products-container');
+    if (!container) return;
+
+    const shopMap = {};
+    allShops.forEach(s => { shopMap[s.id] = s; });
+
+    const sorted = [...allProducts]
+        .filter(p => p.status && p.stock > 0)
+        .sort((a, b) => (b.rating * b.totalSold) - (a.rating * a.totalSold))
+        .slice(0, 6);
+
+    container.innerHTML = sorted
+        .map(p => window.TitikLokal.cards.ProductCard(p, shopMap[p.shopId] || null, `window.TitikLokal.addToCart('${p.id}')`))
+        .join('') || window.TitikLokal.ui.EmptyState('Belum ada produk terlaris.');
+};
+
+const renderSouvenirs = async (allProducts, allShops) => {
+    const container = document.getElementById('souvenirs-container');
+    if (!container) return;
+
+    const shopMap = {};
+    allShops.forEach(s => { shopMap[s.id] = s; });
+
+    // Filter produk dari toko oleh-oleh + produk kuliner yang paling sering terjual
+    const souvenir = [...allProducts]
+        .filter(p => {
+            const shop = shopMap[p.shopId];
+            if (!shop) return false;
+            const isSouvenirShop = SOUVENIR_SHOP_IDS.includes(p.shopId);
+            const isFromCity = shop.address && shop.address.toLowerCase().includes('siantar');
+            return (isSouvenirShop || isFromCity) && p.status && p.stock > 0;
+        })
+        .sort((a, b) => b.totalSold - a.totalSold)
+        .slice(0, 6);
+
+    container.innerHTML = souvenir
+        .map(p => window.TitikLokal.cards.ProductCard(p, shopMap[p.shopId] || null, `window.TitikLokal.addToCart('${p.id}')`))
+        .join('') || window.TitikLokal.ui.EmptyState('Belum ada oleh-oleh.');
+};
+
+const renderLocalFood = async (allProducts, allShops) => {
+    const container = document.getElementById('local-food-container');
+    if (!container) return;
+
+    const shopMap = {};
+    allShops.forEach(s => { shopMap[s.id] = s; });
+
+    const food = [...allProducts]
+        .filter(p => p.categoryId === FOOD_CATEGORY && p.status && p.stock > 0)
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 6);
+
+    container.innerHTML = food
+        .map(p => window.TitikLokal.cards.ProductCard(p, shopMap[p.shopId] || null, `window.TitikLokal.addToCart('${p.id}')`))
+        .join('') || window.TitikLokal.ui.EmptyState('Belum ada makanan khas.');
+};
+
+const renderLocalCrafts = async (allProducts, allShops) => {
+    const container = document.getElementById('local-crafts-container');
+    if (!container) return;
+
+    const shopMap = {};
+    allShops.forEach(s => { shopMap[s.id] = s; });
+
+    const crafts = [...allProducts]
+        .filter(p => p.categoryId === CRAFT_CATEGORY && p.status && p.stock > 0)
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 6);
+
+    container.innerHTML = crafts
+        .map(p => window.TitikLokal.cards.ProductCard(p, shopMap[p.shopId] || null, `window.TitikLokal.addToCart('${p.id}')`))
+        .join('') || window.TitikLokal.ui.EmptyState('Belum ada kerajinan lokal.');
+};
+
 
 const renderPromoBanner = () => {
     const container = document.getElementById('promo-banner-container');
