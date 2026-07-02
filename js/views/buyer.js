@@ -5,6 +5,7 @@
 
 import { api } from '../core/api.js';
 import { store } from '../core/store.js';
+import { storage } from '../core/storage.js';
 import { formatters } from '../utils/formatters.js';
 
 window.TitikLokal = window.TitikLokal || {};
@@ -14,19 +15,29 @@ export const initBuyerHome = async () => {
     try {
         const user = store.getState().currentUser;
         if (user) {
+            // Desktop name + avatar
             const nameEl = document.getElementById('buyer-name-desktop');
-            const avatarEl = document.getElementById('buyer-avatar-desktop');
+            const avatarElMobile = document.getElementById('buyer-avatar-desktop');
+            const avatarElDesktop = document.getElementById('buyer-avatar-desktop-lg');
             if (nameEl) nameEl.innerText = user.name.split(' ')[0];
-            if (avatarEl) avatarEl.innerHTML = `<img src="${user.avatar}" class="w-full h-full object-cover">`;
+            if (avatarElMobile) avatarElMobile.innerHTML = `<img src="${user.avatar}" class="w-full h-full object-cover">`;
+            if (avatarElDesktop) avatarElDesktop.innerHTML = `<img src="${user.avatar}" class="w-full h-full object-cover">`;
         }
+
+        // Location text
         const locEl = document.getElementById('current-location-text');
         if (locEl) locEl.innerText = 'Pematang Siantar';
         const nearbyLocEl = document.getElementById('nearby-location-text');
         if (nearbyLocEl) nearbyLocEl.innerText = 'Pematang Siantar';
 
+        // Load UMKM count for header
+        const shops = await api.getShops();
+        const umkmCountEl = document.getElementById('nearby-umkm-count-text');
+        if (umkmCountEl) umkmCountEl.innerText = `${shops.length} UMKM di sekitar Anda`;
+
+        await renderPromoBanner();
         await renderCategories();
         await renderRecommendedShops();
-        await renderPromoBanner();
     } catch (err) {
         console.error(err);
     } finally {
@@ -37,21 +48,25 @@ export const initBuyerHome = async () => {
 const renderCategories = async () => {
     const container = document.getElementById('category-container');
     if (!container) return;
-    
-    // Using mock categories since it's just static UI structure usually
+
     const categories = [
-        { id: 'c1', name: 'Kuliner', icon: '<svg class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h14a2 2 0 012 2v6zM4 15v4a2 2 0 002 2h12a2 2 0 002-2v-4M9 11v2m6-2v2"></path></svg>' },
-        { id: 'c2', name: 'Fashion', icon: '<svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>' },
-        { id: 'c3', name: 'Kriya', icon: '<svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>' },
-        { id: 'c4', name: 'Jasa', icon: '<svg class="w-8 h-8 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>' }
+        { id: 'c1', name: 'Kuliner', color: 'bg-amber-50 text-amber-600', border: 'border-amber-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>' },
+        { id: 'c2', name: 'Fashion', color: 'bg-rose-50 text-rose-500', border: 'border-rose-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>' },
+        { id: 'c3', name: 'Kerajinan', color: 'bg-emerald-50 text-emerald-600', border: 'border-emerald-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>' },
+        { id: 'c4', name: 'Oleh-Oleh', color: 'bg-orange-50 text-orange-500', border: 'border-orange-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>' },
+        { id: 'c5', name: 'Pertanian', color: 'bg-lime-50 text-lime-600', border: 'border-lime-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' },
+        { id: 'c6', name: 'Minuman', color: 'bg-sky-50 text-sky-500', border: 'border-sky-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"></path></svg>' },
+        { id: 'c7', name: 'Jasa', color: 'bg-violet-50 text-violet-600', border: 'border-violet-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>' },
+        { id: 'c8', name: 'Kesehatan', color: 'bg-red-50 text-red-500', border: 'border-red-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>' },
+        { id: 'c9', name: 'Rumah Tangga', color: 'bg-indigo-50 text-indigo-500', border: 'border-indigo-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>' },
     ];
-    
+
     container.innerHTML = categories.map(cat => `
-        <div class="snap-center shrink-0 w-[72px] lg:w-24 cursor-pointer group flex flex-col items-center" onclick="window.TitikLokal.ui.showToast('Filter kategori ${cat.name} aktif', 'info')">
-            <div class="w-16 h-16 lg:w-20 lg:h-20 bg-surface border border-slate-100 shadow-sm rounded-2xl flex items-center justify-center text-3xl mb-2 group-hover:shadow-md group-hover:border-primary-200 group-hover:-translate-y-1 transition-all duration-300">
+        <div class="snap-center shrink-0 flex flex-col items-center gap-2 cursor-pointer group" onclick="window.TitikLokal.ui.showToast('Kategori ${cat.name}', 'info')">
+            <div class="w-16 h-16 rounded-2xl ${cat.color} border ${cat.border} flex items-center justify-center group-hover:-translate-y-1 group-hover:shadow-md transition-all duration-300">
                 ${cat.icon}
             </div>
-            <span class="text-[11px] lg:text-xs font-semibold text-slate-600 text-center line-clamp-1 group-hover:text-primary-600 transition-colors">${cat.name}</span>
+            <span class="text-[11px] font-semibold text-slate-600 text-center w-16 leading-tight group-hover:text-primary-600 transition-colors">${cat.name}</span>
         </div>
     `).join('');
 };
@@ -59,36 +74,147 @@ const renderCategories = async () => {
 const renderRecommendedShops = async () => {
     const container = document.getElementById('nearby-umkm-container');
     if (!container) return;
-    
+
     const shops = await api.getShops();
-    // Koordinat Pematang Siantar
     const userLat = 2.9595;
     const userLng = 99.0690;
-    
+
     let html = '';
-    shops.forEach(shop => {
+    const shopsToShow = shops.slice(0, 10);
+    shopsToShow.forEach(shop => {
         const dist = formatters.calculateDistance(userLat, userLng, shop.coords[0], shop.coords[1]);
         html += window.TitikLokal.cards.StoreCard(shop, dist);
     });
-    
+
     container.innerHTML = html || window.TitikLokal.ui.EmptyState('Belum ada UMKM di area ini.');
 };
 
 const renderPromoBanner = () => {
     const container = document.getElementById('promo-banner-container');
     if (!container) return;
-    
+
+    const banners = [
+        {
+            title: 'Belanja Produk Lokal',
+            subtitle: 'Dukung UMKM di kotamu, hemat lebih banyak!',
+            badge: 'Produk Lokal',
+            gradient: 'from-primary-900/90 via-primary-800/80 to-transparent',
+            img: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=300&fit=crop'
+        },
+        {
+            title: 'Festival UMKM 2025',
+            subtitle: 'Ratusan UMKM, ribuan pilihan produk terbaik',
+            badge: 'Festival',
+            gradient: 'from-violet-900/90 via-purple-800/80 to-transparent',
+            img: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&h=300&fit=crop'
+        },
+        {
+            title: 'Gratis Ongkir UMKM',
+            subtitle: 'Nikmati gratis ongkir untuk pembelian pertama',
+            badge: 'Gratis Ongkir',
+            gradient: 'from-emerald-900/90 via-emerald-800/80 to-transparent',
+            img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=300&fit=crop'
+        },
+        {
+            title: 'Diskon Oleh-Oleh Daerah',
+            subtitle: 'Oleh-oleh khas Siantar diskon hingga 50%',
+            badge: 'Diskon 50%',
+            gradient: 'from-orange-900/90 via-amber-800/80 to-transparent',
+            img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&h=300&fit=crop'
+        }
+    ];
+
+    const slidesHtml = banners.map((b, i) => `
+        <div class="promo-slide shrink-0 w-full relative rounded-2xl overflow-hidden cursor-pointer group" data-index="${i}">
+            <img src="${b.img}" class="w-full h-36 lg:h-48 object-cover group-hover:scale-105 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-r ${b.gradient}"></div>
+            <div class="absolute inset-0 flex flex-col justify-center p-5 lg:p-8 z-10">
+                <span class="inline-flex items-center bg-white/20 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full w-max mb-3 border border-white/30">${b.badge}</span>
+                <h3 class="text-white font-bold text-xl lg:text-3xl leading-tight mb-1.5">${b.title}</h3>
+                <p class="text-white/90 text-xs lg:text-sm hidden sm:block font-medium">${b.subtitle}</p>
+            </div>
+        </div>
+    `).join('');
+
+    const dotsHtml = banners.map((_, i) => `
+        <button class="promo-dot w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-primary-500 w-5' : 'bg-slate-300'}" data-dot="${i}"></button>
+    `).join('');
+
     container.innerHTML = `
-        <div class="relative w-full rounded-3xl overflow-hidden shadow-lg bg-primary-600 cursor-pointer group" onclick="window.TitikLokal.ui.showToast('Voucher disalin!', 'success')">
-            <div class="absolute inset-0 bg-gradient-to-r from-primary-700 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200&h=400&fit=crop" class="w-full h-32 lg:h-48 object-cover mix-blend-overlay group-hover:scale-105 transition-transform duration-700">
-            <div class="absolute inset-0 z-20 flex flex-col justify-center p-6 lg:p-10">
-                <span class="bg-accent-500 text-white text-[10px] lg:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md w-max mb-2">Promo Spesial</span>
-                <h3 class="text-white font-bold text-lg lg:text-2xl w-2/3 lg:w-1/2 leading-tight">Dukung UMKM Sekitar, Diskon 50%</h3>
+        <div class="relative select-none">
+            <div id="promo-track" class="flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide rounded-2xl scroll-smooth">
+                ${slidesHtml}
+            </div>
+            <div class="flex items-center justify-center gap-1.5 mt-3" id="promo-dots">
+                ${dotsHtml}
             </div>
         </div>
     `;
+
+    // Make each slide snap-aligned
+    container.querySelectorAll('.promo-slide').forEach(slide => {
+        slide.classList.add('snap-center');
+    });
+
+    // Auto-slide logic
+    const track = container.querySelector('#promo-track');
+    const dots = container.querySelectorAll('.promo-dot');
+    let currentSlide = 0;
+    let autoSlideTimer = null;
+
+    const goToSlide = (index) => {
+        const slides = track.querySelectorAll('.promo-slide');
+        if (!slides[index]) return;
+        currentSlide = index;
+        track.scrollTo({ left: slides[index].offsetLeft, behavior: 'smooth' });
+        dots.forEach((d, i) => {
+            d.classList.toggle('bg-primary-500', i === index);
+            d.classList.toggle('w-5', i === index);
+            d.classList.toggle('bg-slate-300', i !== index);
+            d.classList.toggle('w-2', i !== index);
+        });
+    };
+
+    const startAutoSlide = () => {
+        clearInterval(autoSlideTimer);
+        autoSlideTimer = setInterval(() => {
+            goToSlide((currentSlide + 1) % banners.length);
+        }, 5000);
+    };
+
+    // Dot click
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => { goToSlide(i); startAutoSlide(); });
+    });
+
+    // Pause on user interaction
+    track.addEventListener('touchstart', () => clearInterval(autoSlideTimer), { passive: true });
+    track.addEventListener('touchend', () => startAutoSlide(), { passive: true });
+
+    // Sync dots on scroll
+    track.addEventListener('scroll', () => {
+        const slides = track.querySelectorAll('.promo-slide');
+        let closest = 0;
+        let minDiff = Infinity;
+        slides.forEach((slide, i) => {
+            const diff = Math.abs(slide.offsetLeft - track.scrollLeft);
+            if (diff < minDiff) { minDiff = diff; closest = i; }
+        });
+        if (closest !== currentSlide) {
+            currentSlide = closest;
+            dots.forEach((d, i) => {
+                d.classList.toggle('bg-primary-500', i === closest);
+                d.classList.toggle('w-5', i === closest);
+                d.classList.toggle('bg-slate-300', i !== closest);
+                d.classList.toggle('w-2', i !== closest);
+            });
+        }
+    }, { passive: true });
+
+    startAutoSlide();
 };
+
+
 
 export const initExploreMap = () => {
     setTimeout(() => {
@@ -196,49 +322,309 @@ export const initOrders = async () => {
 
     store.dispatch('isLoading', true);
     try {
-        const orders = await api.getOrders(user.id);
+        const [orders, cartItems] = await Promise.all([
+            api.getOrders(user.id),
+            api.getCart(user.id)
+        ]);
+        
+        // Group cart items by shop
+        const cartByShop = {};
+        cartItems.forEach(item => {
+            if (!cartByShop[item.shop.id]) {
+                cartByShop[item.shop.id] = { shop: item.shop, items: [] };
+            }
+            cartByShop[item.shop.id].items.push(item);
+        });
+        
+        const subtotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.qty), 0);
+        const totalItems = cartItems.reduce((sum, item) => sum + item.qty, 0);
+        
+        // ── CART SECTION (Shopee-style inline cart) ──
+        let cartHtml = '';
+        if (cartItems.length > 0) {
+            cartHtml = `
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Keranjang (${totalItems} barang)
+                        </h2>
+                    </div>
+                    <div class="space-y-3">
+                        ${Object.values(cartByShop).map(group => `
+                            <div class="bg-surface rounded-2xl shadow-card border border-slate-100 overflow-hidden">
+                                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 border-b border-slate-100">
+                                    <img src="${group.shop.logo}" class="w-6 h-6 rounded-full border border-slate-200">
+                                    <span class="font-bold text-slate-700 text-sm">${group.shop.name}</span>
+                                </div>
+                                <div class="divide-y divide-slate-50">
+                                    ${group.items.map(item => `
+                                        <div class="flex gap-3 p-4">
+                                            <img src="${item.product.images?.[0]?.imgUrl || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-xl object-cover bg-slate-100 shrink-0">
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="font-semibold text-slate-800 text-sm line-clamp-1">${item.product.name}</h4>
+                                                <div class="font-bold text-primary-600 text-sm mt-0.5">${formatters.currency(item.product.price)}</div>
+                                                <div class="flex items-center justify-between mt-2">
+                                                    <button class="text-slate-400 hover:text-red-500 transition-colors p-1" onclick="window.TitikLokal.ordersPage.removeItem('${item.id}')">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                    </button>
+                                                    <div class="flex items-center gap-0 border border-slate-200 rounded-lg overflow-hidden">
+                                                        <button class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors" onclick="window.TitikLokal.ordersPage.updateQty('${item.id}', ${item.qty - 1})">
+                                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                                                        </button>
+                                                        <span class="text-sm font-bold w-8 text-center text-slate-800">${item.qty}</span>
+                                                        <button class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors" onclick="window.TitikLokal.ordersPage.updateQty('${item.id}', ${item.qty + 1})">
+                                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ── ORDER HISTORY SECTION ──
+        let ordersHtml = '';
+        if (orders.length > 0 || cartItems.length === 0) {
+            ordersHtml = `
+                <div>
+                    <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        Riwayat Pesanan
+                    </h2>
+                    ${orders.length === 0 ? window.TitikLokal.ui.EmptyState('Belum ada pesanan.', 'Mulai berbelanja dan dukung UMKM lokal di sekitarmu.') : 
+                    `<div class="space-y-3">
+                        ${orders.map(order => `
+                            <div class="bg-surface rounded-2xl shadow-card border border-slate-100 p-4 cursor-pointer hover:border-primary-300 transition-colors" onclick="window.TitikLokal.ordersPage.showOrderDetail('${order.id}')">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="font-bold text-xs text-slate-500">${order.id}</span>
+                                    <span class="text-xs font-semibold px-2 py-1 rounded-md 
+                                        ${order.status === 'SELESAI' ? 'bg-emerald-100 text-emerald-700' : 
+                                        order.status === 'DIKIRIM' ? 'bg-blue-100 text-blue-700' : 
+                                        order.status === 'MENUNGGU_PEMBAYARAN' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}">
+                                        ${order.status}
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <img src="${order.items[0]?.imgUrl || 'https://via.placeholder.com/150'}" class="w-14 h-14 rounded-xl object-cover bg-slate-100 border border-slate-100 shrink-0">
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-bold text-slate-800 text-sm line-clamp-1">${order.items[0]?.name || 'Produk'}</h4>
+                                        <p class="text-xs text-slate-500">${order.items.length > 1 ? `+${order.items.length - 1} produk lainnya` : `${order.items[0]?.qty} barang`}</p>
+                                    </div>
+                                    <div class="text-right shrink-0">
+                                        <div class="font-bold text-slate-800 text-sm">${formatters.currency(order.grandTotal)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>`
+                    }
+                </div>
+            `;
+        }
+        
+        // ── FLOATING CHECKOUT BAR (above bottom nav = bottom-16) ──
+        let checkoutBar = '';
+        if (cartItems.length > 0) {
+            checkoutBar = `
+                <div class="fixed bottom-16 left-0 right-0 bg-white border-t border-slate-200 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-30">
+                    <div class="max-w-2xl mx-auto flex items-center justify-between">
+                        <div>
+                            <p class="text-[11px] text-slate-400 font-medium">Total (${totalItems} barang)</p>
+                            <p class="text-base font-bold text-primary-600">${formatters.currency(subtotal)}</p>
+                        </div>
+                        <button class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-sm text-sm" onclick="window.TitikLokal.router.navigate('view-checkout')">
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
         
         container.innerHTML = `
-            <header class="bg-surface sticky top-0 z-30 border-b border-slate-100 px-6 py-4 lg:py-6 flex items-center gap-4 max-w-2xl mx-auto w-full">
+            <header class="bg-surface sticky top-0 z-30 border-b border-slate-100 px-6 py-4 flex items-center gap-4 max-w-2xl mx-auto w-full">
                 <button onclick="window.TitikLokal.router.back()" class="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500 hover:text-slate-900 lg:hidden">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 </button>
                 <h1 class="text-xl font-bold text-slate-800 tracking-tight">Pesanan Saya</h1>
             </header>
             
-            <div class="px-4 py-6 max-w-2xl mx-auto space-y-4">
-                ${orders.length === 0 ? window.TitikLokal.ui.EmptyState('Belum ada pesanan.', 'Mulai berbelanja dan dukung UMKM lokal di sekitarmu.') : 
-                orders.map(order => `
-                    <div class="bg-surface rounded-2xl shadow-card border border-slate-100 p-5 cursor-pointer hover:border-primary-300 transition-colors" onclick="window.TitikLokal.ui.showToast('Detail pesanan ${order.id} segera hadir', 'info')">
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                <span class="font-bold text-sm text-slate-700">Belanja</span>
-                            </div>
-                            <span class="text-xs font-semibold px-2 py-1 rounded-md ${order.status === 'SELESAI' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${order.status}</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <img src="${order.items[0]?.imgUrl || 'https://via.placeholder.com/150'}" class="w-16 h-16 rounded-xl object-cover bg-slate-100 border border-slate-100">
-                            <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 text-sm line-clamp-1 mb-1">${order.items[0]?.name || 'Produk'}</h4>
-                                <p class="text-xs text-slate-500">${order.items.length > 1 ? `+${order.items.length - 1} produk lainnya` : `${order.items[0]?.qty} barang`}</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
-                            <div>
-                                <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-0.5">Total Belanja</div>
-                                <div class="font-bold text-slate-800">${formatters.currency(order.grandTotal)}</div>
-                            </div>
-                            <button class="bg-primary-50 text-primary-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-primary-100 transition-colors">Lihat Detail</button>
-                        </div>
-                    </div>
-                `).join('')}
+            <div class="px-4 py-4 max-w-2xl mx-auto ${cartItems.length > 0 ? 'pb-36' : 'pb-24'}">
+                ${cartItems.length === 0 && orders.length === 0 ? window.TitikLokal.ui.EmptyState('Belum ada pesanan.', 'Mulai berbelanja dan dukung UMKM lokal di sekitarmu.') : cartHtml + ordersHtml}
             </div>
+            ${checkoutBar}
         `;
     } catch (err) {
         console.error(err);
     } finally {
         store.dispatch('isLoading', false);
+    }
+};
+
+// Cart controls for the Orders page (avoids duplicate with cart.js)
+window.TitikLokal.ordersPage = {
+    updateQty: async (cartItemId, qty) => {
+        if (qty <= 0) {
+            await api.removeFromCart(cartItemId);
+        } else {
+            await api.updateCartQty(cartItemId, qty);
+        }
+        await initOrders();
+        window.TitikLokal.updateCartBadge?.();
+    },
+    removeItem: async (cartItemId) => {
+        await api.removeFromCart(cartItemId);
+        await initOrders();
+        window.TitikLokal.updateCartBadge?.();
+    },
+    showOrderDetail: async (orderId) => {
+        const order = storage.findOne('orders', o => o.id === orderId);
+        if (!order) return;
+
+        const shop = storage.findOne('shops', s => s.id === order.shopId);
+        
+        let mapHtml = '';
+        if (order.status === 'DIKIRIM' || order.status === 'SELESAI') {
+            mapHtml = `
+                <div class="bg-white rounded-2xl shadow-card border border-slate-100 p-4 mb-4">
+                    <h3 class="font-bold text-slate-800 text-sm mb-3">Lacak Pengiriman</h3>
+                    <div id="tracking-map-${order.id}" class="w-full h-48 rounded-xl bg-slate-100 z-10 overflow-hidden relative border border-slate-200">
+                        ${order.status === 'SELESAI' ? '<div class="absolute inset-0 bg-white/50 backdrop-blur-[2px] z-20 flex items-center justify-center"><span class="font-bold text-emerald-600 bg-white px-4 py-2 rounded-full shadow-sm">Pesanan Tiba</span></div>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        const html = `
+            <div class="fixed inset-0 bg-slate-50 z-50 overflow-y-auto flex flex-col">
+                <header class="bg-surface sticky top-0 z-30 border-b border-slate-100 px-4 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button onclick="document.getElementById('order-detail-modal-${order.id}').remove(); window.TitikLokal.initOrders();" class="p-2 -ml-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-lg font-bold text-slate-800 tracking-tight">Detail Pesanan</h1>
+                    </div>
+                    <span class="text-xs font-semibold px-2 py-1 rounded-md 
+                        ${order.status === 'SELESAI' ? 'bg-emerald-100 text-emerald-700' : 
+                        order.status === 'DIKIRIM' ? 'bg-blue-100 text-blue-700' : 
+                        order.status === 'MENUNGGU_PEMBAYARAN' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}">
+                        ${order.status}
+                    </span>
+                </header>
+                
+                <div class="flex-1 p-4 max-w-2xl mx-auto w-full pb-24">
+                    ${mapHtml}
+
+                    <div class="bg-white rounded-2xl shadow-card border border-slate-100 p-4 mb-4">
+                        <h3 class="font-bold text-slate-800 text-sm mb-3">Informasi Pesanan</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">No. Pesanan</span>
+                                <span class="font-medium text-slate-800">${order.id}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Waktu Pemesanan</span>
+                                <span class="font-medium text-slate-800">${new Date(order.createdAt).toLocaleString('id-ID', { hour12: false })}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden mb-4">
+                        <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 border-b border-slate-100">
+                            <img src="${shop?.logo || 'https://via.placeholder.com/50'}" class="w-6 h-6 rounded-full border border-slate-200">
+                            <span class="font-bold text-slate-700 text-sm">${shop?.name || 'Toko UMKM'}</span>
+                        </div>
+                        <div class="divide-y divide-slate-50">
+                            ${order.items.map(item => `
+                                <div class="flex gap-3 p-4">
+                                    <img src="${item.imgUrl || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-xl object-cover bg-slate-100 shrink-0">
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-semibold text-slate-800 text-sm line-clamp-2">${item.name}</h4>
+                                        <p class="text-xs text-slate-500 mt-1">${item.qty} x ${window.TitikLokal.formatters.currency(item.price)}</p>
+                                    </div>
+                                    <div class="font-bold text-slate-800 text-sm">
+                                        ${window.TitikLokal.formatters.currency(item.price * item.qty)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-card border border-slate-100 p-4 mb-4">
+                        <h3 class="font-bold text-slate-800 text-sm mb-3">Rincian Pembayaran</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Subtotal Produk</span>
+                                <span class="font-medium text-slate-800">${window.TitikLokal.formatters.currency(order.subtotal)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Ongkos Kirim</span>
+                                <span class="font-medium text-slate-800">${window.TitikLokal.formatters.currency(order.shippingFee)}</span>
+                            </div>
+                            ${order.discount > 0 ? `
+                            <div class="flex justify-between text-emerald-600">
+                                <span>Diskon Promo ${order.voucherCode ? `(${order.voucherCode})` : ''}</span>
+                                <span class="font-medium">- ${window.TitikLokal.formatters.currency(order.discount)}</span>
+                            </div>
+                            ` : ''}
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Biaya Layanan/Aplikasi</span>
+                                <span class="font-medium text-slate-800">${window.TitikLokal.formatters.currency(order.appFee || 0)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Biaya Penanganan (Admin)</span>
+                                <span class="font-medium text-slate-800">${window.TitikLokal.formatters.currency(order.adminFee || 0)}</span>
+                            </div>
+                            <div class="border-t border-slate-100 pt-3 flex justify-between items-center mt-2">
+                                <span class="font-bold text-slate-800">Total Pembayaran</span>
+                                <span class="font-bold text-lg text-primary-600">${window.TitikLokal.formatters.currency(order.grandTotal)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-card border border-slate-100 p-4">
+                        <h3 class="font-bold text-slate-800 text-sm mb-3">Riwayat Status</h3>
+                        <div class="space-y-4">
+                            ${[...order.statusHistory].reverse().map((h, i) => `
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-3 h-3 rounded-full ${i === 0 ? 'bg-primary-500' : 'bg-slate-300'}"></div>
+                                        ${i !== order.statusHistory.length - 1 ? '<div class="w-0.5 h-full bg-slate-200 my-1"></div>' : ''}
+                                    </div>
+                                    <div class="pb-2">
+                                        <p class="font-bold text-slate-800 text-sm">${h.status}</p>
+                                        <p class="text-xs text-slate-500 mt-0.5">${h.note || ''}</p>
+                                        <p class="text-[10px] text-slate-400 mt-1">${new Date(h.time).toLocaleString('id-ID')}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const modalContainer = document.createElement('div');
+        modalContainer.id = `order-detail-modal-${order.id}`;
+        modalContainer.innerHTML = html;
+        document.body.appendChild(modalContainer);
+
+        // Inisialisasi peta tracking jika status DIKIRIM
+        if (order.status === 'DIKIRIM' && window.TitikLokal.mapService && shop) {
+            // Kita butuh koordinat asal (toko) dan tujuan (pembeli)
+            // Karena belum ada alamat fix untuk pembeli, kita mock lokasi pembeli sedikit bergeser dari toko
+            const startCoords = shop.coords;
+            const endCoords = [shop.coords[0] + 0.005, shop.coords[1] + 0.005]; 
+            
+            setTimeout(() => {
+                window.TitikLokal.mapService.initTrackingMap(`tracking-map-${order.id}`, startCoords, endCoords, order.id);
+            }, 300); // Wait for modal animation/render
+        }
     }
 };
 

@@ -7,11 +7,11 @@ import { formatters } from '../utils/formatters.js';
 export const cards = {
     StoreCard: (shop, distance = null) => {
         return `
-            <div class="bg-surface rounded-2xl shadow-card hover:shadow-soft transition-all duration-300 border border-slate-100 overflow-hidden cursor-pointer" onclick="window.TitikLokal.router.navigate('view-shop-profile', '${shop.id}')">
-                <div class="h-32 relative bg-slate-200">
-                    <img src="${shop.coverImg}" class="w-full h-full object-cover" loading="lazy" alt="Cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div class="absolute bottom-3 left-3 flex items-end gap-3">
+            <div class="bg-surface rounded-2xl shadow-card hover:shadow-md hover:-translate-y-1 transition-all duration-300 border border-slate-100 overflow-hidden cursor-pointer group" onclick="window.TitikLokal.router.navigate('view-shop-profile', '${shop.id}')">
+                <div class="h-32 relative bg-slate-200 overflow-hidden">
+                    <img src="${shop.coverImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" alt="Cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-3 left-3 flex items-end gap-3 z-10">
                         <img src="${shop.logo}" class="w-12 h-12 rounded-xl border-2 border-white bg-white shadow-sm" alt="Logo">
                         <div class="text-white mb-1">
                             <div class="font-bold text-sm leading-tight truncate w-32">${shop.name}</div>
@@ -35,10 +35,10 @@ export const cards = {
 
     ProductCard: (product, shop = null, onAddToCart = null) => {
         return `
-            <div class="bg-surface rounded-2xl shadow-card border border-slate-100 overflow-hidden flex flex-col relative group">
-                <div class="relative pt-[100%] bg-slate-50">
-                    <img src="${product.imgUrl || (product.images?.[0]?.imgUrl) || 'https://via.placeholder.com/400'}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" alt="${product.name}">
-                    ${!product.status || product.stock < 1 ? `<div class="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center"><span class="bg-slate-800 text-white px-3 py-1 rounded-full text-xs font-bold">Habis</span></div>` : ''}
+            <div class="bg-surface rounded-2xl shadow-card border border-slate-100 overflow-hidden flex flex-col relative group hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer" ${shop ? `onclick="window.TitikLokal.router.navigate('view-shop-profile', '${shop.id}')"` : ''}>
+                <div class="relative pt-[100%] bg-slate-50 overflow-hidden">
+                    <img src="${product.imgUrl || (product.images?.[0]?.imgUrl) || 'https://via.placeholder.com/400'}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" alt="${product.name}">
+                    ${!product.status || product.stock < 1 ? `<div class="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center"><span class="bg-slate-800 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">Habis</span></div>` : ''}
                 </div>
                 <div class="p-3 flex-1 flex flex-col">
                     <h3 class="text-sm font-semibold text-slate-800 line-clamp-2 mb-1 group-hover:text-primary-600 transition-colors">${product.name}</h3>

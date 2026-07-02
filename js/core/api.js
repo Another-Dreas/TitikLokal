@@ -252,15 +252,21 @@ export const api = {
         await delay(800);
         const orderId = `ORD-${Date.now()}`;
 
+        const isCOD = orderPayload.paymentMethodId === 'cod';
+        const initialStatus = isCOD ? 'MENUNGGU_KONFIRMASI' : 'MENUNGGU_PEMBAYARAN';
+
         const newOrder = {
             ...orderPayload,
             id: orderId,
-            status: 'MENUNGGU_KONFIRMASI',
-            statusHistory: [{ status: 'MENUNGGU_KONFIRMASI', time: new Date().toISOString(), note: 'Pesanan dibuat.' }],
+            status: initialStatus,
+            statusHistory: [{ status: initialStatus, time: new Date().toISOString(), note: 'Pesanan dibuat.' }],
             createdAt: new Date().toISOString()
         };
 
         storage.insert('orders', newOrder);
+        
+        // Mulai simulasi alur pesanan
+        api.simulateOrderFlow(orderId, isCOD);
 
         // Kurangi stok produk
         if (orderPayload.items) {
@@ -301,10 +307,52 @@ export const api = {
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     },
 
+    getOrder: async (orderId) => {
+        await delay(150);
+        return storage.findOne('orders', o => o.id === orderId) || null;
+    },
+
+    clearCart: async (userId) => {
+        await delay(100);
+        const items = storage.findMany('cart_items', ci => ci.userId === userId);
+        items.forEach(ci => storage.deleteById('cart_items', ci.id));
+    },
+
     getSellerOrders: async (shopId) => {
         await delay(300);
         return storage.findMany('orders', o => o.shopId === shopId)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    },
+
+    simulateOrderFlow: (orderId, isCOD) => {
+        const updateStatus = (newStatus, note, timeDelay) => {
+            setTimeout(() => {
+                const order = storage.findOne('orders', o => o.id === orderId);
+                if (order && order.status !== 'SELESAI') {
+                    order.status = newStatus;
+                    order.statusHistory.push({ status: newStatus, time: new Date().toISOString(), note });
+                    storage.updateById('orders', orderId, order);
+                    // Force UI refresh if user is on orders view
+                    if (window.TitikLokal && window.TitikLokal.initOrders) {
+                        const ordersView = document.getElementById('view-orders');
+                        if (ordersView && !ordersView.classList.contains('hidden')) {
+                            window.TitikLokal.initOrders();
+                        }
+                    }
+                }
+            }, timeDelay);
+        };
+
+        if (!isCOD) {
+            updateStatus('MENUNGGU_KONFIRMASI', 'Pembayaran berhasil dikonfirmasi.', 5000);
+            updateStatus('DIPROSES', 'Pesanan sedang disiapkan oleh penjual.', 5000 + 8000);
+            updateStatus('DIKIRIM', 'Pesanan sedang dalam perjalanan.', 5000 + 8000 + 10000);
+            updateStatus('SELESAI', 'Pesanan telah diterima pembeli.', 5000 + 8000 + 10000 + 35000);
+        } else {
+            updateStatus('DIPROSES', 'Pesanan sedang disiapkan oleh penjual.', 5000);
+            updateStatus('DIKIRIM', 'Pesanan sedang dalam perjalanan.', 5000 + 8000);
+            updateStatus('SELESAI', 'Pesanan telah diterima pembeli.', 5000 + 8000 + 35000);
+        }
     },
 
     updateOrderStatus: async (orderId, newStatus, note = '') => {

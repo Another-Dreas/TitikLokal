@@ -115,16 +115,16 @@ const renderCart = (container, items, userId) => {
 
     html += `</div>`; // End container
 
-    // Floating Bottom Bar for Checkout
+    // Floating Bottom Bar for Checkout (above bottom nav)
     html += `
-        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 lg:px-8 lg:py-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] z-40">
+        <div class="fixed bottom-16 left-0 right-0 bg-white border-t border-slate-200 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-30">
             <div class="max-w-3xl mx-auto flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-500 font-medium mb-0.5">Subtotal Belanja</p>
-                    <p class="text-lg lg:text-xl font-bold text-primary-600">${formatters.currency(subtotal)}</p>
+                    <p class="text-[11px] text-slate-400 font-medium">Subtotal Belanja</p>
+                    <p class="text-base font-bold text-primary-600">${formatters.currency(subtotal)}</p>
                 </div>
-                <button class="btn-primary px-8 !py-3.5" onclick="window.TitikLokal.router.navigate('view-checkout')">
-                    Checkout Sekarang
+                <button class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-sm text-sm" onclick="window.TitikLokal.router.navigate('view-checkout')">
+                    Checkout
                 </button>
             </div>
         </div>

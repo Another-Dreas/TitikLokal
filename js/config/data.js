@@ -38,6 +38,55 @@ export const initialData = {
             avatar: 'https://ui-avatars.com/api/?name=Parulian+H&background=ef4444&color=fff&bold=true',
             isActive: true, memberLevel: 'Silver', bio: 'Bakso dan mie ayam khas Siantar sejak 1998.',
             joinDate: '2023-09-15T00:00:00.000Z'
+        },
+        {
+            id: 'u_seller_4', name: 'Martha Tampubolon', username: 'marthakue', email: 'martha@mail.com',
+            password: 'password123', role: 'seller', phone: '086789012345',
+            avatar: 'https://ui-avatars.com/api/?name=Martha+T&background=ec4899&color=fff&bold=true',
+            isActive: true, memberLevel: 'Gold', bio: 'Pembuat kue tradisional Siantar.',
+            joinDate: '2023-04-20T00:00:00.000Z'
+        },
+        {
+            id: 'u_seller_5', name: 'Tomas Sinaga', username: 'tomasikan', email: 'tomas@mail.com',
+            password: 'password123', role: 'seller', phone: '087890123456',
+            avatar: 'https://ui-avatars.com/api/?name=Tomas+S&background=0891b2&color=fff&bold=true',
+            isActive: true, memberLevel: 'Silver', bio: 'Penjual ikan arsik dan masakan Batak.',
+            joinDate: '2023-11-05T00:00:00.000Z'
+        },
+        {
+            id: 'u_seller_6', name: 'Linda Purba', username: 'lindabatik', email: 'linda@mail.com',
+            password: 'password123', role: 'seller', phone: '088901234567',
+            avatar: 'https://ui-avatars.com/api/?name=Linda+P&background=7c3aed&color=fff&bold=true',
+            isActive: true, memberLevel: 'Bronze', bio: 'Pengrajin batik Siantar modern.',
+            joinDate: '2024-05-12T00:00:00.000Z'
+        },
+        {
+            id: 'u_seller_7', name: 'Robert Sihotang', username: 'robertherbal', email: 'robert@mail.com',
+            password: 'password123', role: 'seller', phone: '089012345678',
+            avatar: 'https://ui-avatars.com/api/?name=Robert+S&background=16a34a&color=fff&bold=true',
+            isActive: true, memberLevel: 'Silver', bio: 'Produsen jamu dan herbal Simalungun.',
+            joinDate: '2023-07-18T00:00:00.000Z'
+        },
+        {
+            id: 'u_seller_8', name: 'Fransisca Nainggolan', username: 'fransiscasouvenir', email: 'fransisca@mail.com',
+            password: 'password123', role: 'seller', phone: '081122334455',
+            avatar: 'https://ui-avatars.com/api/?name=Fransisca+N&background=d97706&color=fff&bold=true',
+            isActive: true, memberLevel: 'Gold', bio: 'Toko oleh-oleh khas Siantar terlengkap.',
+            joinDate: '2023-01-10T00:00:00.000Z'
+        },
+        {
+            id: 'u_seller_9', name: 'Mangasi Simbolon', username: 'mangasielectronic', email: 'mangasi@mail.com',
+            password: 'password123', role: 'seller', phone: '082233445566',
+            avatar: 'https://ui-avatars.com/api/?name=Mangasi+S&background=1e40af&color=fff&bold=true',
+            isActive: true, memberLevel: 'Bronze', bio: 'Service dan aksesoris elektronik.',
+            joinDate: '2024-01-25T00:00:00.000Z'
+        },
+        {
+            id: 'u_seller_10', name: 'Yanti Manullang', username: 'yantiflower', email: 'yanti@mail.com',
+            password: 'password123', role: 'seller', phone: '083344556677',
+            avatar: 'https://ui-avatars.com/api/?name=Yanti+M&background=be185d&color=fff&bold=true',
+            isActive: true, memberLevel: 'Silver', bio: 'Florist dan dekorasi acara Siantar.',
+            joinDate: '2023-08-30T00:00:00.000Z'
         }
     ],
 
@@ -116,7 +165,115 @@ export const initialData = {
             verificationStatus: 'verified', isOpen: true,
             openHours: '07:00 - 20:00', whatsapp: '083456789012',
             gmapsLink: 'https://www.google.com/maps/search/Kopi+Simalungun+Pematang+Siantar/@2.9610,99.0700,15z'
-        }
+        },
+        {
+            id: 'toko_05', ownerId: 'u_seller_4',
+            name: 'Kue Tradisional Martha', slug: 'kue-tradisional-martha',
+            categoryId: 'cat_kuliner',
+            description: 'Aneka kue tradisional khas Batak dan jajanan pasar segar setiap hari. Lapet, ombus-ombus, dan kue basah lainnya dibuat dengan bahan alami tanpa pengawet.',
+            rating: 4.8, totalReviews: 215, totalSales: 1540, balance: 1200000,
+            coords: [2.9650, 99.0620],
+            address: 'Jl. Melati No. 10, Siantar Barat, Pematang Siantar',
+            coverImg: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=800&q=80',
+            logo: 'https://ui-avatars.com/api/?name=Kue+Martha&background=ec4899&color=fff&bold=true',
+            verificationStatus: 'verified', isOpen: true,
+            openHours: '06:00 - 15:00', whatsapp: '086789012345',
+            gmapsLink: 'https://www.google.com/maps/search/Kue+Martha+Pematang+Siantar/@2.9650,99.0620,15z'
+        },
+        {
+            id: 'toko_06', ownerId: 'u_seller_5',
+            name: 'RM Toba Nauli (Tomas)', slug: 'rm-toba-nauli',
+            categoryId: 'cat_kuliner',
+            description: 'Rumah makan khas Batak Toba yang menyajikan ikan mas arsik, naniura, sangsang, dan babi panggang karo (BPK) dengan resep asli Toba. Halal & Non-Halal terpisah.',
+            rating: 4.7, totalReviews: 320, totalSales: 2100, balance: 5400000,
+            coords: [2.9550, 99.0750],
+            address: 'Jl. Sisingamangaraja No. 88, Siantar Utara, Pematang Siantar',
+            coverImg: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80',
+            logo: 'https://ui-avatars.com/api/?name=RM+Toba+Nauli&background=0891b2&color=fff&bold=true',
+            verificationStatus: 'verified', isOpen: true,
+            openHours: '10:00 - 22:00', whatsapp: '087890123456',
+            gmapsLink: 'https://www.google.com/maps/search/RM+Toba+Nauli+Pematang+Siantar/@2.9550,99.0750,15z'
+        },
+        {
+            id: 'toko_07', ownerId: 'u_seller_6',
+            name: 'Batik Siantar Linda', slug: 'batik-siantar-linda',
+            categoryId: 'cat_fashion',
+            description: 'Pusat batik khas Pematang Siantar dengan motif gabungan corak ulos dan flora Simalungun. Tersedia bahan kain, kemeja pria, dan dress wanita untuk acara formal.',
+            rating: 4.9, totalReviews: 145, totalSales: 890, balance: 3500000,
+            coords: [2.9580, 99.0610],
+            address: 'Jl. Merdeka No. 45, Siantar Timur, Pematang Siantar',
+            coverImg: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=800&q=80',
+            logo: 'https://ui-avatars.com/api/?name=Batik+Linda&background=7c3aed&color=fff&bold=true',
+            verificationStatus: 'verified', isOpen: true,
+            openHours: '09:00 - 18:00', whatsapp: '088901234567',
+            gmapsLink: 'https://www.google.com/maps/search/Batik+Linda+Pematang+Siantar/@2.9580,99.0610,15z'
+        },
+        {
+            id: 'toko_08', ownerId: 'u_seller_7',
+            name: 'Jamu Herbal Simalungun', slug: 'jamu-herbal-simalungun',
+            categoryId: 'cat_kesehatan',
+            description: 'Toko herbal yang menyediakan jamu tradisional khas Simalungun dan Nusantara. Diramu dari empon-empon segar pilihan setiap hari untuk menjaga daya tahan tubuh.',
+            rating: 4.6, totalReviews: 89, totalSales: 540, balance: 950000,
+            coords: [2.9630, 99.0680],
+            address: 'Jl. Cokroaminoto No. 12, Siantar Utara, Pematang Siantar',
+            coverImg: 'https://images.unsplash.com/photo-1615486511484-92e172a2754c?w=800&q=80',
+            logo: 'https://ui-avatars.com/api/?name=Jamu+Herbal&background=16a34a&color=fff&bold=true',
+            verificationStatus: 'unverified', isOpen: true,
+            openHours: '07:00 - 17:00', whatsapp: '089012345678',
+            gmapsLink: 'https://www.google.com/maps/search/Jamu+Simalungun+Pematang+Siantar/@2.9630,99.0680,15z'
+        },
+        {
+            id: 'toko_09', ownerId: 'u_seller_8',
+            name: 'Pusat Oleh-Oleh Fransisca', slug: 'pusat-oleh-oleh-fransisca',
+            categoryId: 'cat_kuliner',
+            description: 'Pusat oleh-oleh terlengkap di Pematang Siantar. Menyediakan kacang tumbuk, ting-ting, teng-teng, sirup markisa, dan aneka snack khas Sumatera Utara.',
+            rating: 4.8, totalReviews: 450, totalSales: 3200, balance: 7200000,
+            coords: [2.9600, 99.0720],
+            address: 'Jl. Sutomo No. 100, Siantar Timur, Pematang Siantar',
+            coverImg: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=800&q=80',
+            logo: 'https://ui-avatars.com/api/?name=Oleh+Oleh+Fransisca&background=d97706&color=fff&bold=true',
+            verificationStatus: 'verified', isOpen: true,
+            openHours: '08:00 - 21:00', whatsapp: '081122334455',
+            gmapsLink: 'https://www.google.com/maps/search/Oleh-oleh+Siantar/@2.9600,99.0720,15z'
+        },
+        {
+            id: 'toko_10', ownerId: 'u_seller_9',
+            name: 'Mangasi Service & Elektronik', slug: 'mangasi-elektronik',
+            categoryId: 'cat_jasa',
+            description: 'Jasa servis laptop, handphone, dan penjualan aksesoris komputer. Berpengalaman lebih dari 10 tahun melayani mahasiswa dan pekerja di Pematang Siantar.',
+            rating: 4.5, totalReviews: 120, totalSales: 450, balance: 1800000,
+            coords: [2.9560, 99.0670],
+            address: 'Jl. Vihara No. 25, Siantar Selatan, Pematang Siantar',
+            coverImg: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800&q=80',
+            logo: 'https://ui-avatars.com/api/?name=Mangasi+Elektronik&background=1e40af&color=fff&bold=true',
+            verificationStatus: 'unverified', isOpen: true,
+            openHours: '09:00 - 20:00', whatsapp: '082233445566',
+            gmapsLink: 'https://www.google.com/maps/search/Service+Laptop+Siantar/@2.9560,99.0670,15z'
+        },
+        {
+            id: 'toko_11', ownerId: 'u_seller_10',
+            name: 'Yanti Florist & Dekor', slug: 'yanti-florist',
+            categoryId: 'cat_jasa',
+            description: 'Melayani pembuatan buket bunga segar, papan bunga ucapan (papan bunga khas Medan/Siantar), dan dekorasi pelaminan untuk acara adat maupun nasional.',
+            rating: 4.9, totalReviews: 310, totalSales: 1800, balance: 4500000,
+            coords: [2.9625, 99.0710],
+            address: 'Jl. Asahan Km 1, Siantar Timur, Pematang Siantar',
+            coverImg: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800&q=80',
+            logo: 'https://ui-avatars.com/api/?name=Yanti+Florist&background=be185d&color=fff&bold=true',
+            verificationStatus: 'verified', isOpen: true,
+            openHours: '07:00 - 19:00', whatsapp: '083344556677',
+            gmapsLink: 'https://www.google.com/maps/search/Papan+Bunga+Siantar/@2.9625,99.0710,15z'
+        },
+        { id: 'toko_12', ownerId: 'u_seller_1', name: 'Warung Nasi Mpok Atik', slug: 'warung-nasi-mpok-atik', categoryId: 'cat_kuliner', description: 'Nasi campur murah meriah.', rating: 4.3, totalReviews: 45, totalSales: 300, balance: 120000, coords: [2.9540, 99.0630], address: 'Jl. Merdeka No 10', coverImg: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Warung+Nasi&background=eab308&color=fff&bold=true', verificationStatus: 'unverified', isOpen: true, openHours: '08:00 - 15:00', whatsapp: '0812' },
+        { id: 'toko_13', ownerId: 'u_seller_2', name: 'Kopi Kenangan Senja', slug: 'kopi-kenangan-senja', categoryId: 'cat_kuliner', description: 'Kopi susu gula aren.', rating: 4.8, totalReviews: 210, totalSales: 890, balance: 400000, coords: [2.9555, 99.0660], address: 'Jl. Sutomo No 15', coverImg: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Kopi+Kenangan&background=8b5cf6&color=fff&bold=true', verificationStatus: 'verified', isOpen: true, openHours: '09:00 - 22:00', whatsapp: '0812' },
+        { id: 'toko_14', ownerId: 'u_seller_3', name: 'Toko Baju Kekinian', slug: 'toko-baju-kekinian', categoryId: 'cat_fashion', description: 'Pakaian pria dan wanita.', rating: 4.5, totalReviews: 80, totalSales: 400, balance: 350000, coords: [2.9565, 99.0680], address: 'Jl. Sutomo No 18', coverImg: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Toko+Baju&background=ec4899&color=fff&bold=true', verificationStatus: 'verified', isOpen: true, openHours: '10:00 - 20:00', whatsapp: '0812' },
+        { id: 'toko_15', ownerId: 'u_seller_4', name: 'Laundry Bersih Kilat', slug: 'laundry-bersih-kilat', categoryId: 'cat_jasa', description: 'Laundry kiloan dan satuan.', rating: 4.6, totalReviews: 120, totalSales: 500, balance: 250000, coords: [2.9575, 99.0700], address: 'Jl. Ahmad Yani No 2', coverImg: 'https://images.unsplash.com/photo-1582735689149-c5615d971578?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Laundry+Bersih&background=0ea5e9&color=fff&bold=true', verificationStatus: 'unverified', isOpen: true, openHours: '07:00 - 21:00', whatsapp: '0812' },
+        { id: 'toko_16', ownerId: 'u_seller_5', name: 'Apotek Sehat Selalu', slug: 'apotek-sehat-selalu', categoryId: 'cat_kesehatan', description: 'Obat generik dan resep dokter.', rating: 4.9, totalReviews: 300, totalSales: 1500, balance: 800000, coords: [2.9585, 99.0720], address: 'Jl. Merdeka No 55', coverImg: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Apotek+Sehat&background=10b981&color=fff&bold=true', verificationStatus: 'verified', isOpen: true, openHours: '08:00 - 22:00', whatsapp: '0812' },
+        { id: 'toko_17', ownerId: 'u_seller_6', name: 'Toko Sepatu Langkah', slug: 'toko-sepatu-langkah', categoryId: 'cat_fashion', description: 'Sepatu sekolah dan olahraga.', rating: 4.4, totalReviews: 95, totalSales: 350, balance: 180000, coords: [2.9595, 99.0740], address: 'Jl. Vihara No 8', coverImg: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Toko+Sepatu&background=f97316&color=fff&bold=true', verificationStatus: 'unverified', isOpen: true, openHours: '09:00 - 18:00', whatsapp: '0812' },
+        { id: 'toko_18', ownerId: 'u_seller_7', name: 'Mie Pangsit Siantar', slug: 'mie-pangsit-siantar', categoryId: 'cat_kuliner', description: 'Mie pangsit babi khas.', rating: 4.7, totalReviews: 400, totalSales: 2000, balance: 900000, coords: [2.9605, 99.0610], address: 'Jl. Surabaya No 12', coverImg: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Mie+Pangsit&background=f43f5e&color=fff&bold=true', verificationStatus: 'verified', isOpen: true, openHours: '06:00 - 15:00', whatsapp: '0812' },
+        { id: 'toko_19', ownerId: 'u_seller_8', name: 'Bengkel Motor Maju', slug: 'bengkel-motor-maju', categoryId: 'cat_jasa', description: 'Servis motor semua merk.', rating: 4.2, totalReviews: 60, totalSales: 200, balance: 150000, coords: [2.9615, 99.0630], address: 'Jl. Cokroaminoto No 20', coverImg: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Bengkel+Motor&background=64748b&color=fff&bold=true', verificationStatus: 'unverified', isOpen: true, openHours: '08:00 - 17:00', whatsapp: '0812' },
+        { id: 'toko_20', ownerId: 'u_seller_9', name: 'Sayur Segar Makmur', slug: 'sayur-segar-makmur', categoryId: 'cat_pertanian', description: 'Sayuran segar dari petani.', rating: 4.8, totalReviews: 150, totalSales: 800, balance: 300000, coords: [2.9625, 99.0650], address: 'Pasar Parluasan', coverImg: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Sayur+Segar&background=22c55e&color=fff&bold=true', verificationStatus: 'verified', isOpen: true, openHours: '05:00 - 12:00', whatsapp: '0812' },
+        { id: 'toko_21', ownerId: 'u_seller_10', name: 'Toko Elektronik Cahaya', slug: 'toko-elektronik-cahaya', categoryId: 'cat_jasa', description: 'Sparepart dan aksesoris HP.', rating: 4.5, totalReviews: 110, totalSales: 600, balance: 400000, coords: [2.9635, 99.0670], address: 'Jl. Sutomo No 100', coverImg: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Toko+Elektronik&background=6366f1&color=fff&bold=true', verificationStatus: 'verified', isOpen: true, openHours: '10:00 - 21:00', whatsapp: '0812' }
     ],
 
     products: [
@@ -189,6 +346,55 @@ export const initialData = {
             price: 65000, stock: 30, categoryId: 'cat_kuliner', status: true,
             images: [{ imgUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80', isPrimary: true }],
             totalSold: 321, rating: 4.6, reviews: 67, weight: 270
+        },
+        {
+            id: 'p11', shopId: 'toko_05', name: 'Kue Ombus-Ombus (Isi 10)',
+            description: 'Kue tradisional Batak dari tepung beras dan kelapa parut dengan isian gula merah lumer. Disajikan hangat lebih nikmat.',
+            price: 25000, stock: 50, categoryId: 'cat_kuliner', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&q=80', isPrimary: true }],
+            totalSold: 890, rating: 4.9, reviews: 145, weight: 500
+        },
+        {
+            id: 'p12', shopId: 'toko_06', name: 'Ikan Mas Arsik Porsi Keluarga',
+            description: 'Ikan mas segar dimasak dengan bumbu arsik khas Toba (andaliman, asam cikala, rias). Rasanya asam, pedas, dan gurih.',
+            price: 120000, stock: 15, categoryId: 'cat_kuliner', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80', isPrimary: true }],
+            totalSold: 432, rating: 4.8, reviews: 112, weight: 1000
+        },
+        {
+            id: 'p13', shopId: 'toko_07', name: 'Kemeja Batik Pria Motif Ulos',
+            description: 'Kemeja lengan pendek bahan katun premium dengan motif cetak ulos modern. Nyaman dipakai untuk acara formal maupun kasual.',
+            price: 185000, stock: 40, categoryId: 'cat_fashion', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=400&q=80', isPrimary: true }],
+            totalSold: 210, rating: 4.7, reviews: 85, weight: 250
+        },
+        {
+            id: 'p14', shopId: 'toko_08', name: 'Jamu Kunyit Asam Botol 1 Liter',
+            description: 'Minuman kesehatan tradisional dari kunyit dan asam jawa asli. Menyegarkan dan baik untuk pencernaan serta daya tahan tubuh.',
+            price: 35000, stock: 30, categoryId: 'cat_kesehatan', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1615486511484-92e172a2754c?w=400&q=80', isPrimary: true }],
+            totalSold: 560, rating: 4.8, reviews: 120, weight: 1100
+        },
+        {
+            id: 'p15', shopId: 'toko_09', name: 'Kacang Tumbuk Khas Siantar (500g)',
+            description: 'Cemilan manis dan renyah dari kacang tanah pilihan bermutu tinggi. Oleh-oleh wajib saat berkunjung ke Siantar.',
+            price: 45000, stock: 80, categoryId: 'cat_kuliner', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400&q=80', isPrimary: true }],
+            totalSold: 1250, rating: 4.9, reviews: 310, weight: 550
+        },
+        {
+            id: 'p16', shopId: 'toko_10', name: 'Service Laptop Install Ulang Windows',
+            description: 'Jasa instal ulang Windows 10/11 lengkap dengan aplikasi standar (Office, Browser, PDF Reader). Pengerjaan 2-3 jam.',
+            price: 150000, stock: 99, categoryId: 'cat_jasa', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&q=80', isPrimary: true }],
+            totalSold: 340, rating: 4.6, reviews: 88, weight: 0
+        },
+        {
+            id: 'p17', shopId: 'toko_11', name: 'Papan Bunga Ukuran Double (2x3m)',
+            description: 'Papan bunga ucapan selamat atau duka cita ukuran besar. Bebas pilih warna dasar dan jenis font. Free ongkir area Siantar.',
+            price: 350000, stock: 10, categoryId: 'cat_jasa', status: true,
+            images: [{ imgUrl: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400&q=80', isPrimary: true }],
+            totalSold: 120, rating: 4.9, reviews: 65, weight: 0
         }
     ],
 

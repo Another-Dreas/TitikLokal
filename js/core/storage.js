@@ -6,7 +6,7 @@
 
 import { initialData } from '../config/data.js';
 
-const STORAGE_KEY = 'titiklokal_db_v3';
+const STORAGE_KEY = 'titiklokal_db_v9';
 
 export const storage = {
     init: () => {

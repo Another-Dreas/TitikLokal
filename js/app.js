@@ -8,6 +8,7 @@ import { api } from './core/api.js';
 import { ui } from './components/ui-library.js';
 import { layout } from './components/layout.js';
 import { cards } from './components/cards.js';
+import { formatters } from './utils/formatters.js';
 import { mapService } from './services/mapService.js';
 import { initBuyerHome, initExploreMap, initProfile, initOrders, initWishlist, initShopProfile } from './views/buyer.js';
 import { initAuth } from './views/auth.js';
@@ -18,7 +19,7 @@ import { initCheckout } from './views/checkout.js';
 window.TitikLokal = window.TitikLokal || {};
 
 Object.assign(window.TitikLokal, {
-    store, router, api, ui, layout, cards, mapService,
+    store, router, api, ui, layout, cards, mapService, formatters,
     initAuth, initBuyerHome, initExploreMap, initProfile,
     initOrders, initWishlist, initShopProfile, initCart, initCheckout,
 
