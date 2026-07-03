@@ -10,7 +10,7 @@ import { layout } from './components/layout.js';
 import { cards } from './components/cards.js';
 import { formatters } from './utils/formatters.js';
 import { mapService } from './services/mapService.js';
-import { initBuyerHome, initExploreMap, initProfile, initOrders, initWishlist, initShopProfile } from './views/buyer.js';
+import { initBuyerHome, initExploreMap, initProfile, initOrders, initWishlist, initShopProfile, initNearbyUmkm } from './views/buyer.js';
 import { initAuth } from './views/auth.js';
 import { initSellerDashboard, initSellerProducts, initSellerOrders, initSellerChat, initSellerProfile } from './views/seller.js';
 import { initCart } from './views/cart.js';
@@ -21,7 +21,7 @@ window.TitikLokal = window.TitikLokal || {};
 Object.assign(window.TitikLokal, {
     store, router, api, ui, layout, cards, mapService, formatters,
     initAuth, initBuyerHome, initExploreMap, initProfile,
-    initOrders, initWishlist, initShopProfile, initCart, initCheckout,
+    initOrders, initWishlist, initShopProfile, initCart, initCheckout, initNearbyUmkm,
 
     // Reset localStorage (untuk development)
     resetData: () => {
@@ -139,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
             initCheckout();
         } else if (v === 'view-shop-profile') {
             if (payload) initShopProfile(payload);
+        } else if (v === 'view-nearby-umkm') {
+            initNearbyUmkm();
         } else if (v === 'view-seller-dashboard') {
             initSellerDashboard();
             layout.renderBottomNav('dashboard', 'seller');

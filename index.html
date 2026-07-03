@@ -79,90 +79,177 @@
 
             <!-- WELCOME SCREEN (SPLASH) -->
             <section id="view-splash"
-                class="view-section hidden absolute inset-0 z-50 bg-background flex flex-col lg:flex-row overflow-hidden">
-                <!-- Decorative Background Vectors -->
-                <div class="absolute inset-0 z-0 pointer-events-none opacity-20 hidden lg:block">
-                    <!-- Abstract Isometric City Map Pattern -->
-                    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M0,50 L50,25 L100,50 L50,75 Z" fill="#2563eb" opacity="0.1" />
-                        <path d="M20,60 L70,35 L120,60 L70,85 Z" fill="#06b6d4" opacity="0.1" />
-                        <path d="M-20,40 L30,15 L80,40 L30,65 Z" fill="#2563eb" opacity="0.1" />
-                    </svg>
-                </div>
+                class="view-section hidden absolute inset-0 z-50 overflow-hidden flex flex-col lg:flex-row">
 
-                <div
-                    class="w-full lg:w-1/2 flex flex-col h-full relative z-10 px-6 py-10 lg:p-16 xl:p-24 justify-between bg-surface lg:bg-transparent">
-                    <!-- Logo -->
-                    <div class="flex items-center gap-3 animate-fade-in">
-                        <div class="bg-primary-600 p-2 rounded-xl text-white shadow-sm">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                        </div>
-                        <span class="text-2xl font-bold text-slate-900 tracking-tight">TitikLokal</span>
+                <!-- ══════════════════════════════════════════════════ -->
+                <!--  MOBILE — Fullscreen Hero (Opsi B: Foto + Overlay) -->
+                <!-- ══════════════════════════════════════════════════ -->
+                <div class="lg:hidden relative flex-1 flex flex-col" style="min-height: 100dvh;">
+
+                    <!-- ① Background Photo Layer -->
+                    <div class="absolute inset-0 z-0">
+                        <img
+                            src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&q=80"
+                            alt="Suasana UMKM Lokal"
+                            class="w-full h-full object-cover object-center"
+                            loading="eager"
+                        >
+                        <!-- Dark-blue overlay, pekat 80% agar teks sangat kontras -->
+                        <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(10,26,80,0.82) 0%, rgba(18,45,130,0.88) 40%, rgba(8,20,70,0.96) 100%);"></div>
                     </div>
 
-                    <!-- Main Content -->
-                    <div class="my-auto lg:mt-32 max-w-md lg:max-w-xl animate-slide-up">
-                        <h1
-                            class="text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 leading-[1.15] tracking-tight mb-6">
-                            Belanja UMKM Lokal<br><span class="text-primary-600">Lebih Mudah dari Sebelumnya</span>
+                    <!-- ② Content: 3-zone layout (top / middle / bottom) -->
+                    <div class="relative z-10 flex flex-col h-full px-6 pt-14 pb-8" style="min-height: 100dvh;">
+
+                        <!-- ZONE A — Logo bar -->
+                        <div class="flex items-center gap-2">
+                            <!-- Logo img — ganti src ini untuk logo kustom -->
+                            <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-white/20" style="background:rgba(255,255,255,0.12); backdrop-filter:blur(8px);">
+                                <img
+                                    src="https://ui-avatars.com/api/?name=TL&background=2563eb&color=fff&bold=true&size=64&font-size=0.5"
+                                    alt="TitikLokal Logo"
+                                    class="w-full h-full object-cover"
+                                    id="splash-logo-img"
+                                >
+                            </div>
+                            <span class="text-[17px] font-bold text-white tracking-tight">TitikLokal</span>
+                        </div>
+
+                        <!-- ZONE B — Hero content (flex-grow, centered vertically) -->
+                        <div class="flex-1 flex flex-col justify-center py-10">
+
+
+
+                            <!-- Headline — ringkas & kuat -->
+                            <h1 class="font-extrabold text-white leading-[1.1] tracking-tight mb-5" style="font-size: clamp(2rem, 9vw, 2.6rem); text-shadow: 0 2px 24px rgba(0,0,0,0.4);">
+                                Belanja UMKM<br>
+                                Terdekat<br>
+                                <span style="color:#67e8f9;">Jadi Lebih Mudah</span>
+                            </h1>
+
+                            <!-- Sub-headline — 1 kalimat, rapi -->
+                            <p class="text-white/60 leading-relaxed" style="font-size:13.5px; max-width:270px;">
+                                Temukan, dukung, dan majukan produk kreatif lokal di sekitar Anda.
+                            </p>
+
+                            <!-- Decorative elegant line -->
+                            <div class="w-12 h-0.5 bg-cyan-400/80 rounded-full mt-6 mb-2"></div>
+                        </div>
+
+                        <!-- ZONE C — CTA Buttons + Footer -->
+                        <div class="flex flex-col gap-3 pb-2">
+
+                            <!-- Primary CTA: Pembeli — solid white, dominan -->
+                            <button id="btn-splash-buyer"
+                                onclick="window.TitikLokal.initAuth('buyer', this)"
+                                class="w-full rounded-2xl font-bold text-[15px] tracking-wide transition-all duration-200 active:scale-[0.97]"
+                                style="background:#ffffff; color:#1e3a8a; padding:15px 0; box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+                                <div class="flex items-center justify-center gap-2.5">
+                                    <svg class="w-4.5 h-4.5" style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                    </svg>
+                                    Masuk sebagai Pembeli
+                                </div>
+                            </button>
+
+                            <!-- Secondary CTA: Penjual — ghost/outline, tidak kalah tapi subordinat -->
+                            <button id="btn-splash-seller"
+                                onclick="window.TitikLokal.initAuth('seller', this)"
+                                class="w-full rounded-2xl font-bold text-[15px] tracking-wide transition-all duration-200 active:scale-[0.97]"
+                                style="background:transparent; color:rgba(255,255,255,0.88); padding:14px 0; border:1.5px solid rgba(255,255,255,0.30);">
+                                <div class="flex items-center justify-center gap-2.5">
+                                    <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                    Masuk sebagai Penjual
+                                </div>
+                            </button>
+
+                            <!-- Syarat & Ketentuan footer -->
+                            <p class="text-center text-[10.5px] leading-relaxed pt-1" style="color:rgba(255,255,255,0.28);">
+                                Dengan melanjutkan, Anda menyetujui
+                                <span class="underline underline-offset-2" style="color:rgba(255,255,255,0.45);">Syarat &amp; Ketentuan</span>
+                                serta <span class="underline underline-offset-2" style="color:rgba(255,255,255,0.45);">Kebijakan Privasi</span> TitikLokal.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════════════════ -->
+                <!--  DESKTOP — Split Screen                           -->
+                <!-- ══════════════════════════════════════════════════ -->
+                <!-- Left: Clean white panel -->
+                <div class="hidden lg:flex w-1/2 flex-col h-full bg-white px-16 xl:px-24 py-14 justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl overflow-hidden border border-slate-100 shadow-sm shrink-0">
+                            <img src="https://ui-avatars.com/api/?name=TL&background=2563eb&color=fff&bold=true&size=64&font-size=0.5" alt="Logo" class="w-full h-full object-cover" id="splash-logo-img-lg">
+                        </div>
+                        <span class="text-xl font-bold text-slate-900 tracking-tight">TitikLokal</span>
+                    </div>
+
+                    <div class="my-auto max-w-md">
+
+
+                        <!-- Headline -->
+                        <h1 class="text-[3.2rem] xl:text-[3.6rem] font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-5">
+                            Belanja UMKM<br>Terdekat <span class="text-blue-600">Jadi<br>Lebih Mudah</span>
                         </h1>
-                        <p class="text-slate-500 text-lg lg:text-xl leading-relaxed mb-10">
-                            Platform marketplace terpercaya. Temukan, dukung, dan majukan UMKM di komunitas Anda.
+
+                        <!-- Sub-headline -->
+                        <p class="text-slate-500 text-base leading-relaxed mb-12 max-w-sm">
+                            Temukan, dukung, dan majukan produk kreatif lokal di sekitar Anda.
                         </p>
 
-                        <!-- Actions -->
-                        <div class="flex flex-col gap-4">
-                            <button id="btn-splash-buyer"
-                                class="btn-primary !py-4 shadow-primary text-base relative overflow-hidden group"
-                                onclick="window.TitikLokal.initAuth('buyer', this)">
-                                <span class="relative z-10">Masuk sebagai Pembeli</span>
+                        <!-- Decorative elegant line -->
+                        <div class="w-16 h-1 bg-blue-500 rounded-full mt-2 mb-12"></div>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-col gap-3 max-w-xs">
+                            <button onclick="window.TitikLokal.initAuth('buyer', this)" id="btn-splash-buyer"
+                                class="w-full rounded-2xl font-bold text-[15px] py-4 text-white transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+                                style="background:linear-gradient(135deg,#2563eb,#1d4ed8); box-shadow:0 8px 24px rgba(37,99,235,0.35);">
+                                <div class="flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                    Masuk sebagai Pembeli
+                                </div>
                             </button>
-                            <button id="btn-splash-seller"
-                                class="btn-secondary !py-4 !border-transparent !bg-slate-50 hover:!bg-slate-100 text-base border !border-slate-200 relative overflow-hidden group"
-                                onclick="window.TitikLokal.initAuth('seller', this)">
-                                <span class="relative z-10">Masuk sebagai Penjual</span>
+                            <button onclick="window.TitikLokal.initAuth('seller', this)" id="btn-splash-seller"
+                                class="w-full rounded-2xl font-bold text-[15px] py-4 text-slate-700 transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
+                                style="background:transparent; border:1.5px solid #cbd5e1;">
+                                <div class="flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    Masuk sebagai Penjual
+                                </div>
                             </button>
                         </div>
                     </div>
+
+                    <!-- Desktop footer -->
+                    <p class="text-xs text-slate-400">
+                        Dengan melanjutkan, Anda menyetujui <span class="underline underline-offset-2 text-slate-500 cursor-pointer">Syarat &amp; Ketentuan</span> dan <span class="underline underline-offset-2 text-slate-500 cursor-pointer">Kebijakan Privasi</span> TitikLokal.
+                    </p>
                 </div>
 
-                <!-- Illustration Right Side (Desktop) -->
-                <div
-                    class="hidden lg:flex w-1/2 bg-slate-50 relative items-center justify-center p-12 overflow-hidden border-l border-slate-100">
-                    <div class="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 opacity-50"></div>
-                    <!-- Modern Flat SVG Illustration representing Local Commerce -->
-                    <div class="relative z-10 w-full max-w-lg animate-float">
-                        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Abstract base -->
-                            <path d="M50 250 L200 320 L350 250 L200 180 Z" fill="#e2e8f0" />
-                            <path d="M50 220 L200 290 L350 220 L200 150 Z" fill="#f1f5f9" />
-                            <!-- Store building isometric -->
-                            <path d="M150 150 L200 120 L250 150 L250 220 L200 250 L150 220 Z" fill="#ffffff"
-                                stroke="#cbd5e1" stroke-width="2" />
-                            <path d="M150 150 L200 180 L250 150" fill="none" stroke="#cbd5e1" stroke-width="2" />
-                            <path d="M200 180 L200 250" fill="none" stroke="#cbd5e1" stroke-width="2" />
-                            <!-- Awning -->
-                            <path d="M140 160 L200 190 L200 210 L140 180 Z" fill="#2563eb" />
-                            <path d="M260 160 L200 190 L200 210 L260 180 Z" fill="#06b6d4" />
-                            <!-- Pin -->
-                            <path
-                                d="M200 120 C180 120 165 100 165 80 C165 50 200 20 200 20 C200 20 235 50 235 80 C235 100 220 120 200 120 Z"
-                                fill="#f59e0b" />
-                            <circle cx="200" cy="75" r="12" fill="#ffffff" />
-                            <!-- Packages / Dots -->
-                            <circle cx="100" cy="230" r="8" fill="#10b981" />
-                            <circle cx="300" cy="260" r="6" fill="#2563eb" />
-                            <circle cx="270" cy="280" r="10" fill="#f59e0b" />
-                        </svg>
+                <!-- Right: Photo panel (desktop) -->
+                <div class="hidden lg:block relative w-1/2 h-full overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&q=80" alt="UMKM" class="absolute inset-0 w-full h-full object-cover object-center">
+                    <!-- Pekat overlay -->
+                    <div class="absolute inset-0" style="background:linear-gradient(160deg,rgba(8,20,70,0.82) 0%,rgba(18,45,130,0.75) 50%,rgba(3,90,130,0.70) 100%);"></div>
+                    <!-- Quote overlay -->
+                    <div class="relative z-10 h-full flex flex-col items-start justify-end px-12 pb-14 text-white">
+                        <div class="w-12 h-0.5 bg-cyan-400 mb-6 rounded-full"></div>
+                        <p class="text-2xl font-bold leading-snug mb-3 max-w-xs">"Dukung UMKM sekitar,<br>kuatkan ekonomi lokal."</p>
+                        <p class="text-white/50 text-sm">Platform khusus UMKM berbasis lokasi</p>
                     </div>
                 </div>
-                <!-- Admin Hidden Trigger (triple-click bottom-right) -->
+
+                <!-- Admin hidden trigger -->
                 <button class="absolute bottom-4 right-4 w-12 h-12 opacity-0 cursor-default"
                     onclick="window.TitikLokal.initAuth('admin', this)" title="Admin"></button>
             </section>
+
+
 
             <!-- ONBOARDING -->
             <section id="view-onboarding"
@@ -352,14 +439,14 @@
                                 <h3 class="font-extrabold text-slate-800 text-base tracking-tight">UMKM Terdekat</h3>
                                 <p class="text-xs text-slate-500 mt-0.5">Di area <span class="font-semibold text-primary-600" id="nearby-location-text"></span></p>
                             </div>
-                            <button id="btn-lihat-semua-umkm" class="text-primary-600 text-xs font-bold hover:text-primary-700 flex items-center gap-1 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-xl transition-colors" onclick="window.TitikLokal.openMap()">
+                            <button id="btn-lihat-semua-umkm" class="text-primary-600 text-xs font-bold hover:text-primary-700 flex items-center gap-1 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-xl transition-colors" onclick="window.TitikLokal.router.navigate('view-nearby-umkm')">
                                 Lihat Semua
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                 </svg>
                             </button>
                         </div>
-                        <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide" id="nearby-umkm-container"></div>
+                        <div class="flex flex-nowrap gap-3 overflow-x-auto pb-3 scrollbar-hide snap-x snap-mandatory -mx-4 px-4" id="nearby-umkm-container"></div>
                     </div>
 
                     <!-- Produk Lokal Terlaris -->
@@ -417,6 +504,34 @@
             </section>
 
 
+
+            <section id="view-nearby-umkm" class="view-section hidden min-h-screen bg-slate-50 pb-24 lg:pb-0">
+                <header class="bg-white sticky top-0 z-30 border-b border-slate-100 px-4 py-3.5 flex items-center gap-3 shadow-sm lg:hidden">
+                    <button onclick="window.TitikLokal.router.back()" class="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </button>
+                    <div>
+                        <h1 class="text-base font-bold text-slate-800 leading-tight">UMKM Terdekat</h1>
+                        <p class="text-[11px] text-slate-500">Pematang Siantar</p>
+                    </div>
+                </header>
+                
+                <div class="p-4 lg:p-8 max-w-5xl mx-auto">
+                    <div class="hidden lg:flex items-center gap-3 mb-6">
+                        <button onclick="window.TitikLokal.router.back()" class="p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors text-slate-600 shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <div>
+                            <h1 class="text-xl font-bold text-slate-800">UMKM Terdekat dari Lokasimu</h1>
+                            <p class="text-slate-500 text-sm">Diurutkan berdasarkan jarak terdekat &bull; Pematang Siantar</p>
+                        </div>
+                    </div>
+                    
+                    <div id="all-nearby-umkm-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                        <!-- Cards injected here -->
+                    </div>
+                </div>
+            </section>
 
             <!-- MAP / EXPLORE -->
             <section id="view-explore-map" class="view-section hidden min-h-screen bg-background relative">

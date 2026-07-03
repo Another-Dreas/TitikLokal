@@ -63,20 +63,89 @@ const renderCategories = async () => {
     if (!container) return;
 
     const categories = [
-        { id: 'c1', name: 'Kuliner', color: 'bg-amber-50 text-amber-600', border: 'border-amber-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>' },
-        { id: 'c2', name: 'Fashion', color: 'bg-rose-50 text-rose-500', border: 'border-rose-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>' },
-        { id: 'c3', name: 'Kerajinan', color: 'bg-emerald-50 text-emerald-600', border: 'border-emerald-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>' },
-        { id: 'c4', name: 'Oleh-Oleh', color: 'bg-orange-50 text-orange-500', border: 'border-orange-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>' },
-        { id: 'c5', name: 'Pertanian', color: 'bg-lime-50 text-lime-600', border: 'border-lime-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' },
-        { id: 'c6', name: 'Minuman', color: 'bg-sky-50 text-sky-500', border: 'border-sky-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"></path></svg>' },
-        { id: 'c7', name: 'Jasa', color: 'bg-violet-50 text-violet-600', border: 'border-violet-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>' },
-        { id: 'c8', name: 'Kesehatan', color: 'bg-red-50 text-red-500', border: 'border-red-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>' },
-        { id: 'c9', name: 'Rumah Tangga', color: 'bg-indigo-50 text-indigo-500', border: 'border-indigo-100', icon: '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>' },
+        {
+            id: 'makanan', name: 'Makanan',
+            color: 'bg-amber-50 text-amber-600', border: 'border-amber-200',
+            gradient: 'from-amber-400 to-orange-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 3c-4.97 0-9 4.03-9 9v2h18v-2c0-4.97-4.03-9-9-9zm-9 13h18v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2z"/>
+            </svg>`
+        },
+        {
+            id: 'minuman', name: 'Minuman',
+            color: 'bg-sky-50 text-sky-600', border: 'border-sky-200',
+            gradient: 'from-sky-400 to-cyan-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 2v4m4-4v4M6 6h12l-1.5 13.5a2.5 2.5 0 01-2.5 2.5h-4a2.5 2.5 0 01-2.5-2.5L6 6z"/>
+            </svg>`
+        },
+        {
+            id: 'kue-snack', name: 'Kue & Snack',
+            color: 'bg-pink-50 text-pink-600', border: 'border-pink-200',
+            gradient: 'from-pink-400 to-rose-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M21 15a2 2 0 01-2 2H5a2 2 0 01-2-2v-1h18v1z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 14V9a3 3 0 013-3h12a3 3 0 013 3v5"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 6V5a4 4 0 018 0v1"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17v3m5-3v3m5-3v3"/>
+            </svg>`
+        },
+        {
+            id: 'oleh-oleh', name: 'Oleh-oleh',
+            color: 'bg-orange-50 text-orange-600', border: 'border-orange-200',
+            gradient: 'from-orange-400 to-yellow-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M20 12v7a1 1 0 01-1 1H5a1 1 0 01-1-1v-7"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8h18v4H3z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8V4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 4c0-1.5 1.5-2 3-2s3 .5 3 2c0 1-1.5 1.5-3 1.5S9 5 9 4z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8v12"/>
+            </svg>`
+        },
+        {
+            id: 'fashion', name: 'Fashion',
+            color: 'bg-rose-50 text-rose-600', border: 'border-rose-200',
+            gradient: 'from-rose-400 to-pink-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 4h10l4 4-3 2v11a1 1 0 01-1 1H7a1 1 0 01-1-1V10L3 8l4-4z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 4a2 2 0 104 0"/>
+            </svg>`
+        },
+        {
+            id: 'kecantikan', name: 'Kecantikan',
+            color: 'bg-fuchsia-50 text-fuchsia-600', border: 'border-fuchsia-200',
+            gradient: 'from-fuchsia-400 to-purple-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 11V5l3-3 3 3v6M7 11h10v10a2 2 0 01-2 2H9a2 2 0 01-2-2V11zm2 0v10m6-10v10"/>
+            </svg>`
+        },
+        {
+            id: 'kerajinan', name: 'Kerajinan',
+            color: 'bg-emerald-50 text-emerald-600', border: 'border-emerald-200',
+            gradient: 'from-emerald-400 to-teal-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M14.121 14.121L19 19m-7-7l5.657-5.657M12 12l-5.657 5.657M12 12L6.343 6.343"/>
+                <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.75"/>
+                <circle cx="19" cy="5" r="2" stroke="currentColor" stroke-width="1.75"/>
+                <circle cx="5" cy="19" r="2" stroke="currentColor" stroke-width="1.75"/>
+                <circle cx="19" cy="19" r="2" stroke="currentColor" stroke-width="1.75"/>
+                <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.75"/>
+            </svg>`
+        },
+        {
+            id: 'jasa', name: 'Jasa',
+            color: 'bg-violet-50 text-violet-600', border: 'border-violet-200',
+            gradient: 'from-violet-400 to-indigo-400',
+            icon: `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+            </svg>`
+        },
     ];
 
     container.innerHTML = categories.map(cat => `
         <div class="snap-center shrink-0 flex flex-col items-center gap-2 cursor-pointer group" onclick="window.TitikLokal.ui.showToast('Kategori ${cat.name}', 'info')">
-            <div class="w-16 h-16 rounded-2xl ${cat.color} border ${cat.border} flex items-center justify-center group-hover:-translate-y-1 group-hover:shadow-md transition-all duration-300">
+            <div class="w-16 h-16 rounded-2xl ${cat.color} border ${cat.border} flex items-center justify-center group-hover:-translate-y-1.5 group-hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br ${cat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-2xl"></div>
                 ${cat.icon}
             </div>
             <span class="text-[11px] font-semibold text-slate-600 text-center w-16 leading-tight group-hover:text-primary-600 transition-colors">${cat.name}</span>
@@ -114,7 +183,7 @@ const renderNearbyUMKM = async (allShops, allProducts) => {
 
     let html = '';
     sorted.forEach(({ shop, dist }) => {
-        html += window.TitikLokal.cards.StoreCard(shop, dist, productCountMap[shop.id] || 0);
+        html += window.TitikLokal.cards.StoreCard(shop, dist, productCountMap[shop.id] || 0, 'flex-none w-48 snap-center');
     });
 
     container.innerHTML = html || window.TitikLokal.ui.EmptyState('Belum ada UMKM di area ini.');
@@ -921,6 +990,46 @@ export const initShopProfile = async (payload) => {
     }
 };
 
+export const initNearbyUmkm = async () => {
+    store.dispatch('isLoading', true);
+    try {
+        const [shops, allProducts] = await Promise.all([
+            api.getShops(),
+            api.getAllProducts()
+        ]);
+
+        const container = document.getElementById('all-nearby-umkm-container');
+        if (!container) return;
+
+        const userLat = 2.9595;
+        const userLng = 99.0690;
+
+        const productCountMap = {};
+        allProducts.forEach(p => {
+            productCountMap[p.shopId] = (productCountMap[p.shopId] || 0) + 1;
+        });
+
+        const sorted = shops
+            .map(shop => {
+                let dist = formatters.calculateDistance(userLat, userLng, shop.coords[0], shop.coords[1]);
+                if (dist < 0.1) dist = parseFloat((Math.random() * 2 + 0.5).toFixed(1)); 
+                return { shop, dist };
+            })
+            .sort((a, b) => a.dist - b.dist);
+
+        let html = '';
+        sorted.forEach(({ shop, dist }) => {
+            html += window.TitikLokal.cards.StoreCard(shop, dist, productCountMap[shop.id] || 0, 'w-full');
+        });
+
+        container.innerHTML = html || window.TitikLokal.ui.EmptyState('Belum ada UMKM di area ini.');
+    } catch (e) {
+        console.error('[initNearbyUmkm]', e);
+    } finally {
+        store.dispatch('isLoading', false);
+    }
+};
+
 // Global Exposure
 window.TitikLokal.initBuyerHome = initBuyerHome;
 window.TitikLokal.initExploreMap = initExploreMap;
@@ -928,3 +1037,4 @@ window.TitikLokal.initProfile = initProfile;
 window.TitikLokal.initOrders = initOrders;
 window.TitikLokal.initWishlist = initWishlist;
 window.TitikLokal.initShopProfile = initShopProfile;
+window.TitikLokal.initNearbyUmkm = initNearbyUmkm;
