@@ -11,7 +11,7 @@ let mapInstance = null;
 let markersLayer = null;
 
 export const mapService = {
-    initMap: (containerId, lat = 2.9595, lng = 99.0690, zoom = 14) => {
+    initMap: (containerId, lat = 2.9641, lng = 99.0767, zoom = 14) => {
         if (!window.L) {
             console.error('[MapService] Leaflet library not loaded.');
             return null;
@@ -98,7 +98,7 @@ export const mapService = {
         }
     },
 
-    addUserMarker: (lat = 2.9595, lng = 99.0690) => {
+    addUserMarker: (lat = 2.9641, lng = 99.0767) => {
         if (!mapInstance) return;
         const userIcon = L.divIcon({
             className: 'user-location-pin',
@@ -126,7 +126,7 @@ export const mapService = {
         } else {
             window.TitikLokal.ui.showToast('Mencari lokasi...', 'info');
             setTimeout(() => {
-                mapService.addUserMarker(2.9595, 99.0690);
+                mapService.addUserMarker(2.9641, 99.0767);
                 mapService.centerToUser();
             }, 500);
         }

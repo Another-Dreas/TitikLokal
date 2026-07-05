@@ -163,8 +163,8 @@ const renderNearbyUMKM = async (allShops, allProducts) => {
     const container = document.getElementById('nearby-umkm-container');
     if (!container) return;
 
-    const userLat = 2.9595;
-    const userLng = 99.0690;
+    const userLat = 2.9641;
+    const userLng = 99.0767;
 
     // Build product count map
     const productCountMap = {};
@@ -394,18 +394,89 @@ const renderPromoBanner = () => {
 
 export const initExploreMap = () => {
     setTimeout(() => {
-        window.TitikLokal.mapService.initMap('explore-map-container', 2.9595, 99.0690, 14);
-        window.TitikLokal.mapService.loadShops(2.9595, 99.0690, 20);
-        window.TitikLokal.mapService.addUserMarker(2.9595, 99.0690);
+        window.TitikLokal.mapService.initMap('explore-map-container', 2.9641, 99.0767, 14);
+        window.TitikLokal.mapService.loadShops(2.9641, 99.0767, 20);
+        window.TitikLokal.mapService.addUserMarker(2.9641, 99.0767);
     }, 350);
 };
 
 export const initProfile = async () => {
     const user = store.getState().currentUser;
-    if (!user) return;
-
     const container = document.getElementById('view-profile');
     if (!container) return;
+
+    // ── TAMPILAN TAMU (GUEST) ──────────────────────────────────
+    if (!user || user.isGuest) {
+        container.innerHTML = `
+            <header class="bg-primary-600 text-white pt-8 pb-16 px-6 rounded-b-[40px] relative">
+                <div class="absolute inset-0 bg-gradient-to-t from-primary-700 to-transparent rounded-b-[40px] z-0"></div>
+                <div class="relative z-10 max-w-lg mx-auto">
+                    <h1 class="text-2xl font-bold tracking-tight mb-6">Akun</h1>
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center border-2 border-white/30">
+                            <svg class="w-8 h-8 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-xl">Mode Tamu</h2>
+                            <p class="text-primary-100 text-sm opacity-90">Anda belum login</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="px-4 -mt-8 relative z-20 max-w-lg mx-auto space-y-4">
+                <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100 text-center">
+                    <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Login untuk Akses Penuh</h3>
+                    <p class="text-slate-500 text-sm mb-6 leading-relaxed">Login atau daftar untuk menikmati pengalaman belanja UMKM lokal secara penuh.</p>
+                    <button onclick="window.TitikLokal.initAuth('buyer')" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-2xl text-sm transition-all transform active:scale-[0.98]">
+                        Login / Daftar Sekarang
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
+                    <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.router.navigate('view-orders')">
+                        <div class="bg-blue-50 group-hover:bg-blue-100 p-2.5 rounded-xl text-blue-600 mr-4 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        </div>
+                        <div class="flex-1 font-semibold text-slate-700 text-sm">Pesanan Saya</div>
+                        <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    
+                    <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.router.navigate('view-wishlist'); window.TitikLokal.layout.renderBottomNav('wishlist','buyer')">
+                        <div class="bg-red-50 group-hover:bg-red-100 p-2.5 rounded-xl text-red-600 mr-4 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        </div>
+                        <div class="flex-1 font-semibold text-slate-700 text-sm">Wishlist Tersimpan</div>
+                        <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
+                    <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 group" onclick="window.TitikLokal.ui.showModal('Tentang Aplikasi', '<div class=&quot;text-center py-4&quot;><h4 class=&quot;font-bold text-slate-800 text-lg&quot;>TitikLokal</h4><p class=&quot;text-xs text-slate-500 mb-4&quot;>Versi 1.0.0</p><p class=&quot;text-sm text-slate-600&quot;>Didesain oleh <strong>Pratama</strong> untuk memajukan UMKM lokal.</p></div>')">
+                        <div class="bg-amber-50 group-hover:bg-amber-100 p-2.5 rounded-xl text-amber-600 mr-4 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                        <div class="flex-1 font-semibold text-slate-700 text-sm">Tentang Aplikasi</div>
+                        <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                    <div class="flex items-center p-4 cursor-pointer hover:bg-slate-50 group" onclick="window.TitikLokal.ui.showModal('Pusat Bantuan', '<p class=&quot;text-sm text-slate-600&quot;>Butuh bantuan?<br><br><strong>WhatsApp:</strong> 0812-3456-7890<br><strong>Email:</strong> support@titiklokal.id</p>')">
+                        <div class="bg-cyan-50 group-hover:bg-cyan-100 p-2.5 rounded-xl text-cyan-600 mr-4 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div>
+                        <div class="flex-1 font-semibold text-slate-700 text-sm">Pusat Bantuan</div>
+                        <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+
+                <!-- Logout -->
+                <button class="w-full mt-2 flex items-center justify-center gap-2 p-4 text-error bg-red-50 hover:bg-red-100 rounded-2xl font-bold transition-colors shadow-sm" onclick="window.TitikLokal.ui.confirmLogout()">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Keluar Akun
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    // ── TAMPILAN USER YANG SUDAH LOGIN ─────────────────────────
 
     container.innerHTML = `
         <header class="bg-primary-600 text-white pt-8 pb-16 px-6 lg:px-8 rounded-b-[40px] relative">
@@ -434,54 +505,94 @@ export const initProfile = async () => {
         </header>
 
         <div class="px-4 -mt-8 relative z-20 max-w-lg mx-auto space-y-4">
-            <!-- Member Card -->
-            <div class="bg-surface rounded-2xl p-5 shadow-card border border-slate-100 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="bg-accent-100 p-2.5 rounded-xl text-accent-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            <!-- Order Status Section -->
+            <div class="bg-surface rounded-2xl p-4 shadow-card border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-slate-800 text-sm">Pesanan Saya</h3>
+                    <button class="text-xs text-primary-600 font-bold hover:text-primary-700" onclick="window.TitikLokal.router.navigate('view-orders')">Riwayat Lengkap</button>
+                </div>
+                <div class="flex justify-between items-start px-2">
+                    <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="window.TitikLokal.router.navigate('view-orders')">
+                        <div class="w-11 h-11 rounded-full bg-slate-50 group-hover:bg-primary-50 flex items-center justify-center text-slate-600 group-hover:text-primary-600 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        </div>
+                        <span class="text-[10px] font-medium text-slate-600 text-center">Belum<br>Bayar</span>
                     </div>
-                    <div>
-                        <div class="text-xs text-slate-500 font-medium">Level Membership</div>
-                        <div class="font-bold text-slate-800">${user.memberLevel || 'Basic'} Member</div>
+                    <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="window.TitikLokal.router.navigate('view-orders')">
+                        <div class="w-11 h-11 rounded-full bg-slate-50 group-hover:bg-primary-50 flex items-center justify-center text-slate-600 group-hover:text-primary-600 transition-colors relative">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 bg-error text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">1</span>
+                        </div>
+                        <span class="text-[10px] font-medium text-slate-600 text-center">Dikemas</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="window.TitikLokal.router.navigate('view-orders')">
+                        <div class="w-11 h-11 rounded-full bg-slate-50 group-hover:bg-primary-50 flex items-center justify-center text-slate-600 group-hover:text-primary-600 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        </div>
+                        <span class="text-[10px] font-medium text-slate-600 text-center">Dikirim</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="window.TitikLokal.router.navigate('view-orders')">
+                        <div class="w-11 h-11 rounded-full bg-slate-50 group-hover:bg-primary-50 flex items-center justify-center text-slate-600 group-hover:text-primary-600 transition-colors relative">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                        </div>
+                        <span class="text-[10px] font-medium text-slate-600 text-center">Beri<br>Ulasan</span>
                     </div>
                 </div>
-                <button class="text-primary-600 text-sm font-semibold hover:text-primary-700">Detail</button>
             </div>
 
             <!-- Menus -->
             <div class="bg-surface rounded-2xl shadow-card border border-slate-100 overflow-hidden">
-                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.TitikLokal.router.navigate('view-orders')">
-                    <div class="bg-blue-50 p-2 rounded-lg text-blue-600 mr-4">
+                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.router.navigate('view-orders')">
+                    <div class="bg-blue-50 group-hover:bg-blue-100 p-2.5 rounded-xl text-blue-600 mr-4 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     </div>
                     <div class="flex-1 font-semibold text-slate-700 text-sm">Pesanan Saya</div>
                     <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
-                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.TitikLokal.router.navigate('view-wishlist'); window.TitikLokal.layout.renderBottomNav('wishlist','buyer')">
-                    <div class="bg-red-50 p-2 rounded-lg text-red-600 mr-4">
+                
+                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.router.navigate('view-wishlist'); window.TitikLokal.layout.renderBottomNav('wishlist','buyer')">
+                    <div class="bg-red-50 group-hover:bg-red-100 p-2.5 rounded-xl text-red-600 mr-4 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                     </div>
                     <div class="flex-1 font-semibold text-slate-700 text-sm">Wishlist Tersimpan</div>
                     <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
-                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.TitikLokal.ui.showToast('Fitur Alamat Segera Hadir', 'info')">
-                    <div class="bg-emerald-50 p-2 rounded-lg text-emerald-600 mr-4">
+                
+                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.ui.showModal('Daftar Alamat', '<p class=&quot;text-sm text-slate-600&quot;>Belum ada alamat tersimpan. Silakan tambahkan alamat pengiriman Anda.</p>')">
+                    <div class="bg-emerald-50 group-hover:bg-emerald-100 p-2.5 rounded-xl text-emerald-600 mr-4 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </div>
                     <div class="flex-1 font-semibold text-slate-700 text-sm">Daftar Alamat</div>
                     <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
-                <div class="flex items-center p-4 cursor-pointer hover:bg-slate-50 transition-colors" onclick="window.TitikLokal.ui.showToast('Fitur QR Code Segera Hadir', 'info')">
-                    <div class="bg-violet-50 p-2 rounded-lg text-violet-600 mr-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                
+                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.ui.showModal('Pengaturan Akun', '<p class=&quot;text-sm text-slate-600&quot;>Ubah profil, kata sandi, dan notifikasi Anda di sini.</p>')">
+                    <div class="bg-slate-100 group-hover:bg-slate-200 p-2.5 rounded-xl text-slate-600 mr-4 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </div>
-                    <div class="flex-1 font-semibold text-slate-700 text-sm">QR Code Akun</div>
+                    <div class="flex-1 font-semibold text-slate-700 text-sm">Pengaturan Akun</div>
+                    <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                
+                <div class="flex items-center p-4 border-b border-slate-50 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.ui.showModal('Tentang Aplikasi', '<div class=&quot;text-center py-4&quot;><div class=&quot;w-16 h-16 bg-primary-100 text-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-3&quot;><svg class=&quot;w-8 h-8&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;><path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z&quot;></path></svg></div><h4 class=&quot;font-bold text-slate-800 text-lg&quot;>TitikLokal</h4><p class=&quot;text-xs text-slate-500 mb-4&quot;>Versi 1.0.0</p><p class=&quot;text-sm text-slate-600&quot;>Didesain dan dikembangkan secara khusus oleh <strong>Pratama</strong> untuk memajukan jangkauan UMKM lokal secara modern dan efisien.</p></div>')">
+                    <div class="bg-amber-50 group-hover:bg-amber-100 p-2.5 rounded-xl text-amber-600 mr-4 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="flex-1 font-semibold text-slate-700 text-sm">Tentang Aplikasi</div>
+                    <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                
+                <div class="flex items-center p-4 cursor-pointer hover:bg-slate-50 transition-colors group" onclick="window.TitikLokal.ui.showModal('Pusat Bantuan', '<p class=&quot;text-sm text-slate-600&quot;>Butuh bantuan? Tim support kami siap membantu.<br><br><strong>WhatsApp:</strong> 0812-3456-7890<br><strong>Email:</strong> support@titiklokal.id</p>')">
+                    <div class="bg-cyan-50 group-hover:bg-cyan-100 p-2.5 rounded-xl text-cyan-600 mr-4 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <div class="flex-1 font-semibold text-slate-700 text-sm">Pusat Bantuan</div>
                     <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
             </div>
 
             <!-- Logout -->
-            <button class="w-full mt-4 flex items-center justify-center gap-2 p-4 text-error bg-red-50 hover:bg-red-100 rounded-2xl font-bold transition-colors" onclick="window.TitikLokal.store.dispatch('LOGOUT'); window.TitikLokal.router.navigate('view-splash')">
+            <button class="w-full mt-2 flex items-center justify-center gap-2 p-4 text-error bg-red-50 hover:bg-red-100 rounded-2xl font-bold transition-colors shadow-sm" onclick="window.TitikLokal.ui.confirmLogout()">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                 Keluar Akun
             </button>
@@ -830,14 +941,14 @@ export const initWishlist = async () => {
                         <div class="bg-surface rounded-2xl shadow-card border border-slate-100 overflow-hidden group">
                             <div class="relative aspect-square overflow-hidden bg-slate-100">
                                 <img src="${item.product.images?.[0]?.imgUrl || 'https://via.placeholder.com/150'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <button class="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm" onclick="window.TitikLokal.api.toggleWishlist('${user.id}', '${item.productId}'); window.TitikLokal.initWishlist();">
+                                <button class="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm" onclick="window.TitikLokal.toggleWishlist('${item.productId}'); window.TitikLokal.initWishlist();">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                                 </button>
                             </div>
                             <div class="p-3">
                                 <h3 class="font-bold text-slate-800 text-sm line-clamp-2 mb-1">${item.product.name}</h3>
                                 <div class="font-bold text-primary-600 mb-2">${formatters.currency(item.product.price)}</div>
-                                <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-xl text-xs font-bold transition-colors" onclick="window.TitikLokal.api.addToCart('${user.id}', '${item.productId}', 1); window.TitikLokal.ui.showToast('Ditambahkan ke keranjang!', 'success');">
+                                <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-xl text-xs font-bold transition-colors" onclick="window.TitikLokal.addToCart('${item.productId}');">
                                     + Keranjang
                                 </button>
                             </div>
@@ -893,19 +1004,35 @@ export const initShopProfile = async (payload) => {
 
             <div class="max-w-4xl mx-auto px-4 lg:px-6 pb-24">
                 <!-- Info Bar -->
-                <div class="bg-surface rounded-2xl p-4 shadow-card border border-slate-100 my-4 grid grid-cols-3 divide-x divide-slate-100 text-center">
-                    <div class="px-4">
+                <div class="bg-surface rounded-2xl p-4 shadow-card border border-slate-100 my-4 grid grid-cols-4 divide-x divide-slate-100 text-center">
+                    <div class="px-2">
                         <div class="font-bold text-lg text-slate-800">${shop.totalSales}+</div>
-                        <div class="text-xs text-slate-500 font-medium">Terjual</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Terjual</div>
                     </div>
-                    <div class="px-4">
+                    <div class="px-2">
                         <div class="font-bold text-lg text-slate-800">${shop.totalReviews}</div>
-                        <div class="text-xs text-slate-500 font-medium">Ulasan</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Ulasan</div>
                     </div>
-                    <div class="px-4">
-                        <div class="font-bold text-lg text-slate-800">${shop.openHours}</div>
-                        <div class="text-xs text-slate-500 font-medium">Jam Buka</div>
+                    <div class="px-2">
+                        <div class="font-bold text-lg text-emerald-600">${shop.chatResponseRate || 95}%</div>
+                        <div class="text-[10px] text-slate-500 font-medium">Performa Balas</div>
                     </div>
+                    <div class="px-1 flex flex-col justify-center">
+                        <div class="font-bold text-[13px] text-slate-800 leading-tight">${shop.openHours}</div>
+                        <div class="text-[10px] text-slate-500 font-medium mt-0.5">Jam Buka</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 mb-4">
+                    <button class="flex-1 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors" onclick="window.TitikLokal.ui.showToast('Toko berhasil diikuti', 'success')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        Ikuti
+                    </button>
+                    <button class="flex-1 py-3 bg-primary-50 text-primary-600 font-bold rounded-xl shadow-sm flex items-center justify-center gap-2 hover:bg-primary-100 transition-colors border border-primary-100" onclick="window.TitikLokal.ui.showToast('Fitur Chat Toko akan segera hadir', 'info')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        Chat Toko
+                    </button>
                 </div>
 
                 <!-- Description -->
@@ -938,7 +1065,7 @@ export const initShopProfile = async (payload) => {
                             <div class="relative pt-[100%] bg-slate-50 overflow-hidden">
                                 <img src="${product.images?.[0]?.imgUrl || 'https://via.placeholder.com/400'}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <button class="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur rounded-full shadow-sm transition-colors ${user && window.TitikLokal.api.isWishlisted(user.id, product.id) ? 'text-red-500' : 'text-slate-400 hover:text-red-400'}" 
-                                    onclick="window.TitikLokal.api.toggleWishlist('${user?.id}', '${product.id}').then(() => window.TitikLokal.ui.showToast('Wishlist diperbarui', 'success'))">
+                                    onclick="window.TitikLokal.toggleWishlist('${product.id}').then(() => window.TitikLokal.ui.showToast('Wishlist diperbarui', 'success'))">
                                     <svg class="w-4 h-4" fill="${user && window.TitikLokal.api.isWishlisted(user.id, product.id) ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                                 </button>
                                 ${!product.status || product.stock < 1 ? '<div class="absolute inset-0 bg-white/70 flex items-center justify-center"><span class="bg-slate-800 text-white px-3 py-1 rounded-full text-xs font-bold">Habis</span></div>' : ''}
@@ -952,7 +1079,7 @@ export const initShopProfile = async (payload) => {
                                 <div class="font-bold text-primary-600 text-sm mb-2">${formatters.currency(product.price)}</div>
                                 ${product.status && product.stock > 0 && user ? `
                                 <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-xl text-xs font-bold transition-colors"
-                                    onclick="window.TitikLokal.api.addToCart('${user.id}', '${product.id}', 1).then(() => { window.TitikLokal.ui.showToast('Masuk Keranjang!', 'success'); window.TitikLokal.updateCartBadge(); })">
+                                    onclick="window.TitikLokal.addToCart('${product.id}')">
                                     + Keranjang
                                 </button>` : ''}
                             </div>
@@ -1001,8 +1128,8 @@ export const initNearbyUmkm = async () => {
         const container = document.getElementById('all-nearby-umkm-container');
         if (!container) return;
 
-        const userLat = 2.9595;
-        const userLng = 99.0690;
+        const userLat = 2.9641;
+        const userLng = 99.0767;
 
         const productCountMap = {};
         allProducts.forEach(p => {

@@ -43,6 +43,9 @@ Object.assign(window.TitikLokal, {
     },
 
     openCart: () => {
+        if (window.TitikLokal.isGuest()) {
+            return window.TitikLokal.requireAuth('membuka keranjang belanja');
+        }
         router.navigate('view-cart');
     },
 
@@ -77,15 +80,53 @@ Object.assign(window.TitikLokal, {
         });
     },
 
-    addToCart: async (productId) => {
+    // Helper: cek apakah user adalah tamu (guest)
+    isGuest: () => {
         const user = store.getState().currentUser;
-        if (!user) { ui.showToast('Silakan login terlebih dahulu', 'info'); return; }
+        return !user || user.isGuest === true || user.role === 'guest';
+    },
+
+    // Helper: tampilkan prompt login jika user adalah tamu
+    requireAuth: (actionLabel = 'melakukan aksi ini') => {
+        const html = `
+            <div class="text-center py-2">
+                <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1">Login Diperlukan</h3>
+                <p class="text-slate-500 text-sm mb-6">Anda perlu login untuk ${actionLabel}. Masuk sekarang untuk akses penuh ke semua fitur TitikLokal.</p>
+                <button onclick="window.TitikLokal.ui.hideModal(); window.TitikLokal.initAuth('buyer')" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 rounded-2xl text-sm transition-all mb-2">Login / Daftar Sekarang</button>
+                <button onclick="window.TitikLokal.ui.hideModal()" class="w-full text-slate-400 font-medium py-2.5 text-sm hover:text-slate-600 transition-colors">Lanjutkan Lihat-Lihat</button>
+            </div>
+        `;
+        ui.showModal('', html);
+        return false;
+    },
+
+    addToCart: async (productId) => {
+        if (window.TitikLokal.isGuest()) {
+            return window.TitikLokal.requireAuth('menambahkan produk ke keranjang');
+        }
+        const user = store.getState().currentUser;
         try {
             await api.addToCart(user.id, productId, 1);
             ui.showToast('Ditambahkan ke keranjang!', 'success');
             window.TitikLokal.updateCartBadge();
         } catch (e) {
             ui.showToast(e.message || 'Gagal menambah ke keranjang', 'error');
+        }
+    },
+
+    toggleWishlist: async (productId) => {
+        if (window.TitikLokal.isGuest()) {
+            return window.TitikLokal.requireAuth('menyimpan produk ke wishlist');
+        }
+        const user = store.getState().currentUser;
+        try {
+            await api.toggleWishlist(user.id, productId);
+            ui.showToast('Wishlist diperbarui', 'success');
+        } catch (e) {
+            ui.showToast('Gagal memperbarui wishlist', 'error');
         }
     }
 });

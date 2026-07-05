@@ -104,6 +104,24 @@ export const ui = {
     hideModal: () => {
         const modal = document.getElementById('global-modal');
         if (modal) modal.remove();
+    },
+
+    confirmLogout: () => {
+        const content = `
+            <div class="text-center pt-2">
+                <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </div>
+                <p class="text-slate-600 text-sm">Apakah Anda yakin ingin keluar dari akun Anda?</p>
+            </div>
+        `;
+        const actions = `
+            <div class="flex gap-3">
+                <button class="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors" onclick="window.TitikLokal.ui.hideModal()">Batal</button>
+                <button class="flex-1 py-3 px-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-sm" onclick="window.TitikLokal.store.dispatch('LOGOUT'); window.TitikLokal.router.navigate('view-splash'); window.TitikLokal.ui.hideModal();">Ya, Keluar</button>
+            </div>
+        `;
+        window.TitikLokal.ui.showModal('Konfirmasi Keluar', content, actions);
     }
 };
 

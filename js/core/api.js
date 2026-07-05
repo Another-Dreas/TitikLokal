@@ -91,6 +91,11 @@ export const api = {
         return storage.findMany('shops', s => s.ownerId === ownerId);
     },
 
+    getShopByOwner: async (ownerId) => {
+        await delay(200);
+        return storage.findOne('shops', s => s.ownerId === ownerId);
+    },
+
     updateShop: async (shopId, updates) => {
         await delay(300);
         return storage.updateById('shops', shopId, updates);
@@ -342,6 +347,39 @@ export const api = {
         await delay(300);
         return storage.findMany('orders', o => o.shopId === shopId)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    },
+
+    getOrdersByShop: async (shopId) => {
+        await delay(300);
+        let orders = storage.findMany('orders', o => o.shopId === shopId);
+        
+        // Seed dummy orders if empty (useful if localstorage is stale)
+        if (orders.length === 0) {
+            const dummyOrders = [
+                {
+                    id: `ORD-${Date.now()}-1`, buyerId: 'u_1', shopId: shopId,
+                    status: 'MENUNGGU_KONFIRMASI', paymentMethodId: 'transfer',
+                    items: [{ productId: 'p1', qty: 2, price: 15000 }],
+                    totalAmount: 30000, shippingFee: 5000,
+                    deliveryAddress: { label: 'Rumah', address: 'Jl. Merdeka No 1, Pematang Siantar', notes: 'Pagar hitam' },
+                    createdAt: new Date().toISOString(),
+                    statusHistory: [{ status: 'MENUNGGU_KONFIRMASI', time: new Date().toISOString(), note: 'Pesanan dibuat' }]
+                },
+                {
+                    id: `ORD-${Date.now()}-2`, buyerId: 'u_2', shopId: shopId,
+                    status: 'DIPROSES', paymentMethodId: 'cod',
+                    items: [{ productId: 'p4', qty: 1, price: 250000 }],
+                    totalAmount: 250000, shippingFee: 0,
+                    deliveryAddress: { label: 'Kantor', address: 'Jl. Sudirman No 10, Pematang Siantar', notes: 'Titip di resepsionis' },
+                    createdAt: new Date().toISOString(),
+                    statusHistory: [{ status: 'DIPROSES', time: new Date().toISOString(), note: 'Pesanan sedang disiapkan' }]
+                }
+            ];
+            dummyOrders.forEach(o => storage.insert('orders', o));
+            orders = storage.findMany('orders', o => o.shopId === shopId);
+        }
+        
+        return orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     },
 
     simulateOrderFlow: (orderId, isCOD) => {

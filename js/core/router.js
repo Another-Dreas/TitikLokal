@@ -17,12 +17,12 @@ const routes = {
     'view-explore-map': { auth: true, roles: ['buyer', 'guest'] },
     'view-shop-profile': { auth: true, roles: ['buyer', 'guest', 'seller'] },
     'view-auth': { auth: false },
-    'view-wishlist': { auth: true, roles: ['buyer'] },
+    'view-wishlist': { auth: true, roles: ['buyer', 'guest'] },
     'view-cart': { auth: true, roles: ['buyer'] },
     'view-checkout': { auth: true, roles: ['buyer'] },
-    'view-profile': { auth: true, roles: ['buyer'] },
-    'view-orders': { auth: true, roles: ['buyer'] },
-    'view-tracking': { auth: true, roles: ['buyer'] },
+    'view-profile': { auth: true, roles: ['buyer', 'guest'] },
+    'view-orders': { auth: true, roles: ['buyer', 'guest'] },
+    'view-tracking': { auth: true, roles: ['buyer', 'guest'] },
     
     // Seller
     'view-seller-dashboard': { auth: true, roles: ['seller'] },
