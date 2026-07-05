@@ -269,6 +269,8 @@ window.TitikLokal = window.TitikLokal || {};
 window.TitikLokal.sellerOrders = {
     currentTab: 'MENUNGGU_KONFIRMASI',
     orders: [],
+    activeOrderId: null,
+    trackingInterval: null,
     
     init: async () => {
         const store = window.TitikLokal.store;
@@ -292,20 +294,36 @@ window.TitikLokal.sellerOrders = {
     
     switchTab: (tab) => {
         window.TitikLokal.sellerOrders.currentTab = tab;
+        window.TitikLokal.sellerOrders.activeOrderId = null;
+        if (window.TitikLokal.sellerOrders.trackingInterval) {
+            clearInterval(window.TitikLokal.sellerOrders.trackingInterval);
+            window.TitikLokal.sellerOrders.trackingInterval = null;
+        }
         window.TitikLokal.sellerOrders.render();
     },
     
     updateStatus: async (orderId, newStatus) => {
         const store = window.TitikLokal.store;
         const api = window.TitikLokal.api;
-        
         store.dispatch('isLoading', true);
         try {
             await api.updateOrderStatus(orderId, newStatus);
-            // Refresh
             const user = store.getState().currentUser;
             const shop = await api.getShopByOwner(user.id);
             window.TitikLokal.sellerOrders.orders = await api.getOrdersByShop(shop.id);
+            if (newStatus === 'DIKIRIM') {
+                // Stay on full view to start live tracking
+                window.TitikLokal.sellerOrders.activeOrderId = orderId;
+            } else if (newStatus === 'SELESAI') {
+                // Auto-complete: go back to tab list
+                window.TitikLokal.sellerOrders.activeOrderId = null;
+                window.TitikLokal.sellerOrders.currentTab = 'SELESAI';
+                if (window.TitikLokal.ui && window.TitikLokal.ui.showToast) {
+                    window.TitikLokal.ui.showToast('Pesanan selesai diantarkan!', 'success');
+                }
+            } else {
+                window.TitikLokal.sellerOrders.activeOrderId = null;
+            }
             window.TitikLokal.sellerOrders.render();
         } catch(e) {
             console.error(e);
@@ -316,94 +334,287 @@ window.TitikLokal.sellerOrders = {
     
     showOjolModal: (orderId) => {
         const order = window.TitikLokal.sellerOrders.orders.find(o => o.id === orderId);
-        if(!order) return;
-        
-        const content = `
-            <div class="flex flex-col gap-4 text-sm">
-                <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                    <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="font-bold text-slate-800">GrabExpress Instant</div>
-                        <div class="text-xs text-slate-500">Estimasi: 15-30 Menit</div>
-                    </div>
-                    <div class="font-bold text-slate-800">Rp ${window.TitikLokal.formatters.number(order.shippingFee || 12000)}</div>
+        if (!order) return;
+        const fmt = window.TitikLokal.formatters;
+        const addr = order.deliveryAddress ? order.deliveryAddress.address : 'Alamat pembeli';
+        const fee = fmt.number(order.shippingFee || 12000);
+
+        // Step 1: tampilkan info layanan + tombol Panggil Kurir (driver belum muncul)
+        const content = `<div class="flex flex-col gap-3 text-sm">
+            <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                <div class="w-11 h-11 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
-                <div class="text-slate-600">
-                    <p class="mb-1"><strong>Alamat Pengiriman:</strong></p>
-                    <p class="text-xs">${order.deliveryAddress ? order.deliveryAddress.address : 'Alamat pembeli'}</p>
+                <div class="flex-1">
+                    <div class="font-bold text-slate-800">GrabExpress Instant</div>
+                    <div class="text-xs text-slate-500 mt-0.5">Estimasi pengantaran: 15-30 Menit</div>
                 </div>
+                <div class="font-bold text-emerald-600">Rp ${fee}</div>
             </div>
-        `;
-        
-        const actions = `
-            <button class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-sm transition-colors" 
-                onclick="window.TitikLokal.ui.hideModal(); window.TitikLokal.sellerOrders.updateStatus('${orderId}', 'DIKIRIM'); window.TitikLokal.ui.showToast('Kurir berhasil dipanggil!', 'success');">
-                Panggil Kurir
-            </button>
-        `;
-        
+            <div class="bg-slate-50 rounded-xl p-3">
+                <p class="text-[10px] text-slate-400 uppercase tracking-wide mb-1">Alamat Pengiriman</p>
+                <p class="text-xs text-slate-700">${addr}</p>
+            </div>
+        </div>`;
+
+        const actions = `<button id="btn-panggil-kurir" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-sm transition-colors"
+            onclick="window.TitikLokal.sellerOrders.searchDriver('${orderId}')">
+            Panggil Kurir
+        </button>`;
+
         window.TitikLokal.ui.showModal('Pilih Kurir Ojol', content, actions);
     },
-    
+
+    searchDriver: (orderId) => {
+        const driverPool = [
+            { name: 'Rudi Harahap',    vehicle: 'Honda Beat',  plate: 'BK 2341 AH' },
+            { name: 'Surya Siregar',   vehicle: 'Yamaha Mio',  plate: 'BK 5782 BC' },
+            { name: 'Andi Situmorang', vehicle: 'Honda Vario', plate: 'BK 1093 DA' },
+            { name: 'Doni Panjaitan',  vehicle: 'Yamaha NMAX', plate: 'BK 4417 FG' },
+            { name: 'Benny Sinaga',    vehicle: 'Honda PCX',   plate: 'BK 8831 JK' },
+        ];
+
+        // Update tombol jadi loading
+        const btn = document.getElementById('btn-panggil-kurir');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = `<span style="display:flex;align-items:center;justify-content:center;gap:8px">
+                <svg style="width:16px;height:16px;animation:spin 1s linear infinite" fill="none" viewBox="0 0 24 24">
+                    <circle style="opacity:0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path style="opacity:0.75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+                Mencari driver terdekat...
+            </span>`;
+            btn.style.backgroundColor = '#94a3b8';
+            btn.style.cursor = 'not-allowed';
+        }
+
+        // Simulasi pencarian 2.5 detik lalu tampilkan detail driver
+        setTimeout(() => {
+            const driver = driverPool[Math.floor(Math.random() * driverPool.length)];
+
+            // Cari elemen konten modal dan update
+            const modalScroll = btn ? btn.closest('.overflow-y-auto') || btn.parentElement.previousElementSibling : null;
+            if (modalScroll) {
+                modalScroll.innerHTML = `<div class="flex flex-col gap-3 text-sm">
+                    <div class="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                        <div class="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center shrink-0 font-bold text-lg">
+                            ${driver.name.charAt(0)}
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-bold text-slate-800">${driver.name}</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
+                                <span class="text-xs text-emerald-600 font-semibold">Driver ditemukan</span>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <div class="text-xs text-slate-400">GrabExpress</div>
+                            <div class="text-xs font-semibold text-slate-600">15-30 Menit</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-slate-50 rounded-xl p-3">
+                            <p class="text-[10px] text-slate-400 uppercase tracking-wide mb-1.5">Kendaraan</p>
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <span class="font-semibold text-slate-800 text-xs">${driver.vehicle}</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-3">
+                            <p class="text-[10px] text-slate-400 uppercase tracking-wide mb-1.5">Nomor Polisi</p>
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2" stroke-width="2"/><line x1="7" y1="11" x2="9" y2="11" stroke-width="2"/><line x1="15" y1="11" x2="17" y2="11" stroke-width="2"/></svg>
+                                <span class="font-bold text-slate-800 text-xs tracking-widest">${driver.plate}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // Update tombol ke Konfirmasi
+            if (btn) {
+                btn.disabled = false;
+                btn.style.backgroundColor = '';
+                btn.style.cursor = '';
+                btn.textContent = 'Konfirmasi & Mulai Pengiriman';
+                btn.onclick = () => {
+                    window.TitikLokal.ui.hideModal();
+                    window.TitikLokal.ui.showToast('Kurir ' + driver.name + ' dalam perjalanan!', 'success');
+                    window.TitikLokal.sellerOrders.updateStatus(orderId, 'DIKIRIM');
+                };
+            }
+        }, 2500);
+    },
+
     showOrderDetails: (orderId) => {
         const order = window.TitikLokal.sellerOrders.orders.find(o => o.id === orderId);
-        if(!order) return;
-        
-        const content = `
-            <div class="flex flex-col gap-4 text-sm">
-                <div class="p-3 bg-slate-50 rounded-xl">
-                    <p class="text-xs text-slate-500 mb-1">Order ID: ${order.id}</p>
-                    <p class="font-bold text-slate-800">Total Pembayaran: Rp ${window.TitikLokal.formatters.number(order.totalAmount + (order.shippingFee||0))}</p>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-slate-800 mb-2">Produk Dipesan</h4>
-                    <div class="space-y-2">
-                        ${order.items.map(item => {
-                            const p = window.TitikLokal.store.getState().products ? window.TitikLokal.store.getState().products.find(x => x.id === item.productId) : null;
-                            return `<div class="flex justify-between items-center bg-white p-2 border border-slate-100 rounded-lg">
-                                <div>
-                                    <div class="font-medium text-slate-800">${p ? p.name : 'Produk'}</div>
-                                    <div class="text-xs text-slate-500">${item.qty} x Rp ${window.TitikLokal.formatters.number(item.price)}</div>
-                                </div>
-                                <div class="font-bold">Rp ${window.TitikLokal.formatters.number(item.qty * item.price)}</div>
-                            </div>`;
-                        }).join('')}
+        if (!order) return;
+
+        // Tab "Baru" (MENUNGGU_KONFIRMASI) → tampilkan pop-up modal dengan foto produk
+        if (order.status === 'MENUNGGU_KONFIRMASI') {
+            const fmt = window.TitikLokal.formatters;
+            const products = (window.TitikLokal.store.getState().products) || [];
+            const addr = order.deliveryAddress ? order.deliveryAddress.address : 'Alamat pembeli';
+
+            const itemsHtml = order.items.map(item => {
+                const p = products.find(x => x.id === item.productId);
+                const imgSrc = (p && p.images && p.images[0]) ? p.images[0] : (p && p.image ? p.image : '');
+                const imgEl = imgSrc
+                    ? `<img src="${imgSrc}" alt="${p ? p.name : ''}" class="w-12 h-12 rounded-xl object-cover border border-slate-100 shrink-0">`
+                    : `<div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 text-slate-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`;
+                return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-b-0">
+                    ${imgEl}
+                    <div class="flex-1 min-w-0">
+                        <div class="font-semibold text-slate-800 text-sm truncate">${p ? p.name : 'Produk'}</div>
+                        <div class="text-xs text-slate-500">${item.qty} x Rp ${fmt.number(item.price)}</div>
                     </div>
+                    <div class="font-bold text-slate-700 text-sm shrink-0">Rp ${fmt.number(item.qty * item.price)}</div>
+                </div>`;
+            }).join('');
+
+            const content = `<div class="flex flex-col gap-3 text-sm">
+                <div class="bg-slate-50 rounded-xl p-3">
+                    <p class="text-[10px] text-slate-400 mb-0.5">${order.id}</p>
+                    <p class="font-bold text-slate-800">Rp ${fmt.number(order.totalAmount + (order.shippingFee || 0))}</p>
+                    <p class="text-[10px] text-slate-400 mt-0.5">${fmt.date(order.createdAt)}</p>
                 </div>
-                
-                <div>
-                    <h4 class="font-bold text-slate-800 mb-1">Info Pengiriman</h4>
-                    <p class="text-xs text-slate-600">${order.deliveryAddress ? order.deliveryAddress.address : 'Alamat pembeli'}</p>
-                    ${order.deliveryAddress && order.deliveryAddress.notes ? `<p class="text-xs text-slate-500 mt-1">Catatan: ${order.deliveryAddress.notes}</p>` : ''}
+                <div class="bg-white rounded-xl border border-slate-100 px-3 py-1">
+                    <p class="text-xs font-bold text-slate-500 pt-2 mb-1">Produk Dipesan</p>
+                    ${itemsHtml}
                 </div>
-            </div>
-        `;
-        
-        let actions = '';
-        if(order.status === 'MENUNGGU_KONFIRMASI') {
-            actions = `<button class="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-sm transition-colors" 
-                onclick="window.TitikLokal.ui.hideModal(); window.TitikLokal.sellerOrders.updateStatus('${orderId}', 'DIPROSES')">
+                <div class="bg-slate-50 rounded-xl p-3">
+                    <p class="text-xs font-bold text-slate-500 mb-1">Alamat Pengiriman</p>
+                    <p class="text-xs text-slate-700">${addr}</p>
+                    ${order.deliveryAddress && order.deliveryAddress.notes ? `<p class="text-xs text-slate-400 mt-1">Catatan: ${order.deliveryAddress.notes}</p>` : ''}
+                </div>
+            </div>`;
+
+            const actions = `<button class="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-sm transition-colors"
+                onclick="window.TitikLokal.ui.hideModal(); window.TitikLokal.sellerOrders.updateStatus('${orderId}','DIPROSES');">
                 Terima Pesanan
             </button>`;
-        } else if (order.status === 'DIPROSES') {
-            actions = `<button class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-sm transition-colors" 
-                onclick="window.TitikLokal.ui.hideModal(); window.TitikLokal.sellerOrders.showOjolModal('${orderId}')">
-                Pilih Kurir Ojol
-            </button>`;
-        } else if (order.status === 'DIKIRIM') {
-            actions = `<button class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-sm transition-colors" 
-                onclick="window.TitikLokal.ui.hideModal(); window.TitikLokal.sellerOrders.updateStatus('${orderId}', 'SELESAI')">
-                Pesanan Selesai
-            </button>`;
+
+            window.TitikLokal.ui.showModal('Pesanan Baru', content, actions);
+            return;
         }
-        
-        window.TitikLokal.ui.showModal('Detail Pesanan', content, actions);
+
+        // Tab lainnya (Diproses, Dikirim, Selesai) → buka halaman penuh
+        window.TitikLokal.sellerOrders.activeOrderId = orderId;
+        window.TitikLokal.sellerOrders.render();
+    },
+
+    startLiveTracking: (orderId, mapId, statusId) => {
+        if (!window.L) { console.warn('Leaflet not loaded'); return; }
+        if (window.TitikLokal.sellerOrders.trackingInterval) {
+            clearInterval(window.TitikLokal.sellerOrders.trackingInterval);
+        }
+        // Dummy coords: shop near Univ. HKBP Nommensen Pematang Siantar
+        const shopLat = 2.9641, shopLng = 99.0767;
+        const destLat = 2.9683, destLng = 99.0831;
+        const map = L.map(mapId, { zoomControl: false, attributionControl: false })
+            .setView([(shopLat + destLat) / 2, (shopLng + destLng) / 2], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        const mkShop = L.circleMarker([shopLat, shopLng], { radius: 8, color: '#2563eb', fillColor: '#2563eb', fillOpacity: 1 })
+            .addTo(map).bindTooltip('Toko', { permanent: true, direction: 'top' });
+        const mkDest = L.circleMarker([destLat, destLng], { radius: 8, color: '#10b981', fillColor: '#10b981', fillOpacity: 1 })
+            .addTo(map).bindTooltip('Pelanggan', { permanent: true, direction: 'top' });
+        const bikeHtml = '<div style="width:28px;height:28px;background:#f59e0b;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>';
+        const bikeIcon = L.divIcon({ html: bikeHtml, className: '', iconAnchor: [14, 14] });
+        const bikeMarker = L.marker([shopLat, shopLng], { icon: bikeIcon }).addTo(map);
+        L.polyline([[shopLat, shopLng], [destLat, destLng]], { color: '#94a3b8', dashArray: '6 4', weight: 2 }).addTo(map);
+        let step = 0, total = 120; // 120 steps × 150ms = 18 seconds
+        const statusEl = document.getElementById(statusId);
+        window.TitikLokal.sellerOrders.trackingInterval = setInterval(() => {
+            step++;
+            const r = step / total;
+            bikeMarker.setLatLng([shopLat + (destLat - shopLat) * r, shopLng + (destLng - shopLng) * r]);
+            if (statusEl) {
+                if (r < 0.3) statusEl.textContent = '\u23F3 Kurir sedang menuju ke toko...';
+                else if (r < 0.6) statusEl.textContent = '\uD83D\uDCE6 Kurir telah mengambil pesanan';
+                else if (r < 0.98) statusEl.textContent = '\uD83D\uDEF5 Kurir dalam perjalanan ke lokasi Anda';
+            }
+            if (step >= total) {
+                clearInterval(window.TitikLokal.sellerOrders.trackingInterval);
+                window.TitikLokal.sellerOrders.trackingInterval = null;
+                if (statusEl) statusEl.textContent = '\u2705 Pesanan telah sampai di tujuan!';
+                setTimeout(() => window.TitikLokal.sellerOrders.updateStatus(orderId, 'SELESAI'), 1200);
+            }
+        }, 150);
+    },
+
+    renderFullView: () => {
+        const orderId = window.TitikLokal.sellerOrders.activeOrderId;
+        const order = window.TitikLokal.sellerOrders.orders.find(o => o.id === orderId);
+        if (!order) { window.TitikLokal.sellerOrders.activeOrderId = null; window.TitikLokal.sellerOrders.render(); return; }
+        const container = document.getElementById('view-seller-orders');
+        if (!container) return;
+        const fmt = window.TitikLokal.formatters;
+        const products = (window.TitikLokal.store.getState().products) || [];
+        const itemsHtml = order.items.map(item => {
+            const p = products.find(x => x.id === item.productId);
+            return `<div class="flex justify-between items-center bg-slate-50 p-3 border border-slate-100 rounded-xl">
+                <div><div class="font-semibold text-slate-800 text-sm">${p ? p.name : 'Produk'}</div>
+                <div class="text-xs text-slate-500 mt-0.5">${item.qty} x Rp ${fmt.number(item.price)}</div></div>
+                <div class="font-bold text-slate-800">Rp ${fmt.number(item.qty * item.price)}</div></div>`;
+        }).join('');
+        const addr = order.deliveryAddress ? order.deliveryAddress.address : 'Alamat pembeli';
+        const notes = (order.deliveryAddress && order.deliveryAddress.notes) ? `<p class="text-xs text-slate-500 mt-1">Catatan: ${order.deliveryAddress.notes}</p>` : '';
+        const isDikirim = order.status === 'DIKIRIM';
+        const trackingHtml = isDikirim ? `
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-3 bg-emerald-50 border-b border-emerald-100">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span class="font-bold text-emerald-700 text-sm">Live Tracking Kurir</span>
+                </div>
+                <div id="order-tracking-map" style="height:200px;width:100%;z-index:0;"></div>
+            </div>` : '';
+        let footerHtml = '';
+        if (order.status === 'MENUNGGU_KONFIRMASI') {
+            footerHtml = `<button class="w-full py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-sm transition-colors"
+                onclick="window.TitikLokal.sellerOrders.updateStatus('${orderId}','DIPROSES')">Terima Pesanan</button>`;
+        } else if (order.status === 'DIPROSES') {
+            footerHtml = `<button class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-sm transition-colors"
+                onclick="window.TitikLokal.sellerOrders.showOjolModal('${orderId}')">Pilih Kurir Ojol</button>`;
+        } else if (order.status === 'DIKIRIM') {
+            footerHtml = `<div id="order-tracking-status" class="text-center font-semibold text-emerald-700 py-1">\u23F3 Kurir sedang menuju ke toko...</div>`;
+        } else if (order.status === 'SELESAI') {
+            footerHtml = `<div class="flex items-center justify-center gap-2 text-green-700 font-bold py-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Pesanan Telah Selesai Diterima</div>`;
+        }
+        container.innerHTML = `<div class="max-w-lg mx-auto bg-slate-50 min-h-screen flex flex-col">
+            <div class="bg-white px-4 py-4 shadow-sm sticky top-0 z-30 flex items-center gap-3">
+                <button onclick="window.TitikLokal.sellerOrders.activeOrderId=null;if(window.TitikLokal.sellerOrders.trackingInterval){clearInterval(window.TitikLokal.sellerOrders.trackingInterval);window.TitikLokal.sellerOrders.trackingInterval=null;}window.TitikLokal.sellerOrders.render();" class="p-2 hover:bg-slate-50 rounded-xl transition-colors">
+                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <h1 class="text-lg font-bold text-slate-900">Detail Pesanan</h1>
+            </div>
+            <div class="flex-1 p-4 space-y-4 pb-32">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-xs text-slate-400 mb-1">${order.id}</p>
+                    <p class="font-bold text-slate-800 text-base">Rp ${fmt.number(order.totalAmount + (order.shippingFee || 0))}</p>
+                    <p class="text-xs text-slate-400 mt-1">${fmt.date(order.createdAt)}</p>
+                </div>
+                ${trackingHtml}
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-slate-800 mb-3 text-sm">Produk Dipesan</h4>
+                    <div class="space-y-2">${itemsHtml}</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-slate-800 mb-2 text-sm">Info Pengiriman</h4>
+                    <p class="text-xs text-slate-600">${addr}</p>${notes}
+                </div>
+            </div>
+            <div class="bg-white px-4 py-4 border-t border-slate-200 sticky bottom-0 z-30">${footerHtml}</div>
+        </div>`;
+        if (isDikirim) {
+            setTimeout(() => window.TitikLokal.sellerOrders.startLiveTracking(orderId, 'order-tracking-map', 'order-tracking-status'), 400);
+        }
     },
     
     render: () => {
+        if (window.TitikLokal.sellerOrders.activeOrderId) {
+            return window.TitikLokal.sellerOrders.renderFullView();
+        }
         const container = document.getElementById('view-seller-orders');
         if (!container) return;
         
