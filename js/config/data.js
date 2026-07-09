@@ -158,7 +158,7 @@ export const initialData = {
             rating: 4.9, totalReviews: 312, totalSales: 2841, balance: 3200000,
             coords: [2.9650, 99.0770],
             address: 'Jl. Wahidin No. 12, Siantar Barat, Pematang Siantar',
-            coverImg: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80',
+            coverImg: 'https://mediapijar.com/wp-content/uploads/2020/07/IMG_2529.jpg',
             logo: 'https://ui-avatars.com/api/?name=Roti+Ganda&background=f59e0b&color=fff&bold=true',
             verificationStatus: 'verified', chatResponseRate: 97, isOpen: true,
             openHours: '06:00 - 21:00', whatsapp: '083456789012',
@@ -172,7 +172,7 @@ export const initialData = {
             rating: 4.7, totalReviews: 98, totalSales: 421, balance: 1850000,
             coords: [2.9635, 99.0760],
             address: 'Jl. Sutomo No. 45, Siantar Utara, Pematang Siantar',
-            coverImg: 'https://images.unsplash.com/photo-1604762433015-bc8399580df7?w=800&q=80',
+            coverImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKckxs71MLuAecGdkp3O9VqBl4BP-OCotR-2TSjLcD27Lpo8mB_0-iuGU&s=10',
             logo: 'https://ui-avatars.com/api/?name=Ulos+Saragih&background=10b981&color=fff&bold=true',
             verificationStatus: 'verified', chatResponseRate: 99, isOpen: true,
             openHours: '08:00 - 17:00', whatsapp: '084567890123',
@@ -242,7 +242,7 @@ export const initialData = {
             rating: 4.9, totalReviews: 145, totalSales: 890, balance: 3500000,
             coords: [2.9630, 99.0780],
             address: 'Jl. Merdeka No. 45, Siantar Timur, Pematang Siantar',
-            coverImg: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=800&q=80',
+            coverImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStxrui6xYcONWJcj3YFHEWfK75GlCE1UCL5w2hRqOBrQ&s=10',
             logo: 'https://ui-avatars.com/api/?name=Batik+Linda&background=7c3aed&color=fff&bold=true',
             verificationStatus: 'verified', chatResponseRate: 89, isOpen: true,
             openHours: '09:00 - 18:00', whatsapp: '088901234567',
@@ -270,8 +270,7 @@ export const initialData = {
             rating: 4.8, totalReviews: 450, totalSales: 3200, balance: 7200000,
             coords: [2.9655, 99.0765],
             address: 'Jl. Sutomo No. 100, Siantar Timur, Pematang Siantar',
-            coverImg: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=800&q=80',
-            logo: 'https://ui-avatars.com/api/?name=Oleh+Oleh+Fransisca&background=d97706&color=fff&bold=true',
+            coverImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5jy2LKwtPBOnQNVHNCy4CFK4rLb9zeFmhYmWaaNweD070hnlatXrVD1uN&s=10',
             verificationStatus: 'verified', chatResponseRate: 91, isOpen: true,
             openHours: '08:00 - 21:00', whatsapp: '081122334455',
             gmapsLink: 'https://www.google.com/maps/search/Oleh-oleh+Siantar/@2.9600,99.0720,15z'
@@ -307,8 +306,8 @@ export const initialData = {
         { id: 'toko_12', ownerId: 'u_seller_1', name: 'Warung Nasi Mpok Atik', slug: 'warung-nasi-mpok-atik', categoryId: 'cat_kuliner', description: 'Nasi campur murah meriah.', rating: 4.3, totalReviews: 45, totalSales: 300, balance: 120000, coords: [2.9540, 99.0630], address: 'Jl. Merdeka No 10', coverImg: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Warung+Nasi&background=eab308&color=fff&bold=true', verificationStatus: 'unverified', chatResponseRate: 87, isOpen: true, openHours: '08:00 - 15:00', whatsapp: '0812' },
         { id: 'toko_13', ownerId: 'u_seller_2', name: 'Kopi Kenangan Senja', slug: 'kopi-kenangan-senja', categoryId: 'cat_kuliner', description: 'Kopi susu gula aren.', rating: 4.8, totalReviews: 210, totalSales: 890, balance: 400000, coords: [2.9555, 99.0660], address: 'Jl. Sutomo No 15', coverImg: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Kopi+Kenangan&background=8b5cf6&color=fff&bold=true', verificationStatus: 'verified', chatResponseRate: 93, isOpen: true, openHours: '09:00 - 22:00', whatsapp: '0812' },
         { id: 'toko_14', ownerId: 'u_seller_3', name: 'Toko Baju Kekinian', slug: 'toko-baju-kekinian', categoryId: 'cat_fashion', description: 'Pakaian pria dan wanita.', rating: 4.5, totalReviews: 80, totalSales: 400, balance: 350000, coords: [2.9565, 99.0680], address: 'Jl. Sutomo No 18', coverImg: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Toko+Baju&background=ec4899&color=fff&bold=true', verificationStatus: 'verified', chatResponseRate: 95, isOpen: true, openHours: '10:00 - 20:00', whatsapp: '0812' },
-        { id: 'toko_15', ownerId: 'u_seller_4', name: 'Laundry Bersih Kilat', slug: 'laundry-bersih-kilat', categoryId: 'cat_jasa', description: 'Laundry kiloan dan satuan.', rating: 4.6, totalReviews: 120, totalSales: 500, balance: 250000, coords: [2.9575, 99.0700], address: 'Jl. Ahmad Yani No 2', coverImg: 'https://images.unsplash.com/photo-1582735689149-c5615d971578?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Laundry+Bersih&background=0ea5e9&color=fff&bold=true', verificationStatus: 'unverified', chatResponseRate: 85, isOpen: true, openHours: '07:00 - 21:00', whatsapp: '0812' },
-        { id: 'toko_16', ownerId: 'u_seller_5', name: 'Apotek Sehat Selalu', slug: 'apotek-sehat-selalu', categoryId: 'cat_kesehatan', description: 'Obat generik dan resep dokter.', rating: 4.9, totalReviews: 300, totalSales: 1500, balance: 800000, coords: [2.9585, 99.0720], address: 'Jl. Merdeka No 55', coverImg: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Apotek+Sehat&background=10b981&color=fff&bold=true', verificationStatus: 'verified', chatResponseRate: 88, isOpen: true, openHours: '08:00 - 22:00', whatsapp: '0812' },
+        { id: 'toko_15', ownerId: 'u_seller_4', name: 'Laundry Bersih Kilat', slug: 'laundry-bersih-kilat', categoryId: 'cat_jasa', description: 'Laundry kiloan dan satuan.', rating: 4.6, totalReviews: 120, totalSales: 500, balance: 250000, coords: [2.9575, 99.0700], address: 'Jl. Ahmad Yani No 2', coverImg: 'https://clotheslaundryjogja.id/sitepad-data/uploads/2024/09/img2.jpg', logo: 'https://ui-avatars.com/api/?name=Laundry+Bersih&background=0ea5e9&color=fff&bold=true', verificationStatus: 'unverified', chatResponseRate: 85, isOpen: true, openHours: '07:00 - 21:00', whatsapp: '0812' },
+        { id: 'toko_16', ownerId: 'u_seller_5', name: 'Apotek Sehat Selalu', slug: 'apotek-sehat-selalu', categoryId: 'cat_kesehatan', description: 'Obat generik dan resep dokter.', rating: 4.9, totalReviews: 300, totalSales: 1500, balance: 800000, coords: [2.9585, 99.0720], address: 'Jl. Merdeka No 55', coverImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpJ67RyQfZtTtXk7CLj9v9PvKlDFeNO1-fDDF0tkWDwS-HkJuPrM1Y46fs&s=10', logo: 'https://ui-avatars.com/api/?name=Apotek+Sehat&background=10b981&color=fff&bold=true', verificationStatus: 'verified', chatResponseRate: 88, isOpen: true, openHours: '08:00 - 22:00', whatsapp: '0812' },
         { id: 'toko_17', ownerId: 'u_seller_6', name: 'Toko Sepatu Langkah', slug: 'toko-sepatu-langkah', categoryId: 'cat_fashion', description: 'Sepatu sekolah dan olahraga.', rating: 4.4, totalReviews: 95, totalSales: 350, balance: 180000, coords: [2.9595, 99.0740], address: 'Jl. Vihara No 8', coverImg: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Toko+Sepatu&background=f97316&color=fff&bold=true', verificationStatus: 'unverified', chatResponseRate: 86, isOpen: true, openHours: '09:00 - 18:00', whatsapp: '0812' },
         { id: 'toko_18', ownerId: 'u_seller_7', name: 'Mie Pangsit Siantar', slug: 'mie-pangsit-siantar', categoryId: 'cat_kuliner', description: 'Mie pangsit babi khas.', rating: 4.7, totalReviews: 400, totalSales: 2000, balance: 900000, coords: [2.9605, 99.0610], address: 'Jl. Surabaya No 12', coverImg: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Mie+Pangsit&background=f43f5e&color=fff&bold=true', verificationStatus: 'verified', chatResponseRate: 91, isOpen: true, openHours: '06:00 - 15:00', whatsapp: '0812' },
         { id: 'toko_19', ownerId: 'u_seller_8', name: 'Bengkel Motor Maju', slug: 'bengkel-motor-maju', categoryId: 'cat_jasa', description: 'Servis motor semua merk.', rating: 4.2, totalReviews: 60, totalSales: 200, balance: 150000, coords: [2.9615, 99.0630], address: 'Jl. Cokroaminoto No 20', coverImg: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80', logo: 'https://ui-avatars.com/api/?name=Bengkel+Motor&background=64748b&color=fff&bold=true', verificationStatus: 'unverified', chatResponseRate: 93, isOpen: true, openHours: '08:00 - 17:00', whatsapp: '0812' },
@@ -318,59 +317,59 @@ export const initialData = {
 
     products: [
         {
-            id: 'p1', shopId: 'toko_01', name: 'Roti Tawar Ganda (1 Loaf)',
+            id: 'p1', shopId: 'toko_01', name: 'Roti Tawar Ganda',
             description: 'Roti tawar legendaris khas Siantar. Tekstur lembut, empuk, dan tahan hingga 4 hari tanpa pengawet.',
             price: 22000, stock: 30, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1zSiWJOTMsIEdBsncVojS02v5Dqmu9AI8R0_e3xpeGgQraX3qgJbGA7k&s=10', isPrimary: true }],
             totalSold: 1240, rating: 4.9, reviews: 213, weight: 400
         },
         {
-            id: 'p2', shopId: 'toko_01', name: 'Roti Isi Cokelat Keju (6 Pcs)',
+            id: 'p2', shopId: 'toko_01', name: 'Roti Srikaya',
             description: 'Roti isi dengan kombinasi cokelat dan keju premium. Lembut, manis, dan mengenyangkan.',
             price: 35000, stock: 20, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://awsimages.detik.net.id/community/media/visual/2023/02/25/legendaris-roti-selai-srikaya-buatan-toko-roti-ganda-pematang-siantar-8.jpeg?w=1200', isPrimary: true }],
             totalSold: 876, rating: 4.8, reviews: 148, weight: 300
         },
         {
-            id: 'p3', shopId: 'toko_01', name: 'Bolu Gulung Pandan (1 Roll)',
+            id: 'p3', shopId: 'toko_01', name: 'Roti bolu',
             description: 'Bolu gulung pandan dengan lapisan krim susu lembut. Oleh-oleh khas favorit dari Siantar.',
             price: 45000, stock: 15, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSODZ6Zj9DGTy_If8S1vl6RrThrDFi_m2PBv4aLFjWvBQ&s', isPrimary: true }],
             totalSold: 543, rating: 4.9, reviews: 97, weight: 350
         },
         {
             id: 'p4', shopId: 'toko_02', name: 'Ulos Ragi Hotang (Motif Tradisional)',
             description: 'Ulos ragi hotang tenun tangan, bermotif tradisional Simalungun. Cocok untuk upacara adat dan koleksi.',
             price: 450000, stock: 5, categoryId: 'cat_kriya', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1604762433015-bc8399580df7?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://down-id.img.susercontent.com/file/ee20aa41ad126ccb174da223d80e6835', isPrimary: true }],
             totalSold: 87, rating: 4.7, reviews: 43, weight: 600
         },
         {
             id: 'p5', shopId: 'toko_02', name: 'Tas Anyam Rotan Batak',
             description: 'Tas anyam dari rotan pilihan, desain motif Batak modern. Kuat, ringan, dan elegan.',
             price: 185000, stock: 8, categoryId: 'cat_kriya', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1531835551805-16d864c8d311?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://martapura.org/cdn/shop/products/WhatsAppImage2022-06-28at06.34.29_1.jpg?v=1656954932', isPrimary: true }],
             totalSold: 124, rating: 4.6, reviews: 38, weight: 400
         },
         {
             id: 'p6', shopId: 'toko_02', name: 'Miniatur Gorga Batak (Kayu)',
             description: 'Miniatur ukiran gorga Batak dari kayu jati pilihan. Dekorasi rumah bernilai seni tinggi.',
             price: 120000, stock: 12, categoryId: 'cat_kriya', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB94LDGcgPL9Vcczalr0DSKVqj6jOI1kecKW2CUMNb0Uk6SIpwre-a7wA&s=10', isPrimary: true }],
             totalSold: 76, rating: 4.8, reviews: 29, weight: 500
         },
         {
-            id: 'p7', shopId: 'toko_03', name: 'Bakso Sapi Spesial (Isi 10)',
-            description: 'Bakso sapi murni ukuran besar, kenyal dan gurih. Disajikan dengan kuah kaldu sapi asli dan mie bihun.',
+            id: 'p7', shopId: 'toko_09', name: 'Roti Ketawa Siantar',
+            description: 'Roti ketawa khas Siantar yang lembut dan empuk. Cocok untuk teman minum kopi.',
             price: 28000, stock: 100, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST3MqrePCtoCMJwPdA2I6p3v2uuy9L4NpuZbOWWGiI6g&s=10', isPrimary: true }],
             totalSold: 2341, rating: 4.9, reviews: 387, weight: 400
         },
         {
             id: 'p8', shopId: 'toko_03', name: 'Mie Ayam Siantar Porsi Jumbo',
             description: 'Mie ayam khas Siantar dengan topping ayam cincang bumbu kecap, pangsit goreng, dan bakso tambahan.',
             price: 22000, stock: 80, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/9e6b7d87-f190-4589-8a46-8b7b62fce547_Go-Biz_20250206_115556.jpeg', isPrimary: true }],
             totalSold: 1876, rating: 4.8, reviews: 231, weight: 350
         },
         {
@@ -391,7 +390,7 @@ export const initialData = {
             id: 'p11', shopId: 'toko_05', name: 'Kue Ombus-Ombus (Isi 10)',
             description: 'Kue tradisional Batak dari tepung beras dan kelapa parut dengan isian gula merah lumer. Disajikan hangat lebih nikmat.',
             price: 25000, stock: 50, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLCvtf5KxYbhwPbNZhGKk-4--RqPsEpaJCWgiWmOWFsk0_Muv3802CXhjV&s=10', isPrimary: true }],
             totalSold: 890, rating: 4.9, reviews: 145, weight: 500
         },
         {
@@ -416,10 +415,10 @@ export const initialData = {
             totalSold: 560, rating: 4.8, reviews: 120, weight: 1100
         },
         {
-            id: 'p15', shopId: 'toko_09', name: 'Kacang Tumbuk Khas Siantar (500g)',
-            description: 'Cemilan manis dan renyah dari kacang tanah pilihan bermutu tinggi. Oleh-oleh wajib saat berkunjung ke Siantar.',
+            id: 'p15', shopId: 'toko_01', name: 'Roti Ganda',
+            description: 'Roti terbaik dari Pematangsiantar yang rasanya gak ada duanya',
             price: 45000, stock: 80, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTkLr69suie77vhMsrFDaewfmXEFeQW7nitVJ7cVsmaQ&s=10', isPrimary: true }],
             totalSold: 1250, rating: 4.9, reviews: 310, weight: 550
         },
         {
@@ -447,21 +446,21 @@ export const initialData = {
             id: 'p19', shopId: 'toko_09', name: 'Sirup Markisa Asli Simalungun',
             description: 'Sirup buah markisa murni tanpa pemanis buatan. Rasanya asam manis menyegarkan, oleh-oleh wajib khas Sumatera Utara.',
             price: 65000, stock: 40, categoryId: 'cat_kuliner', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://images.tokopedia.net/img/cache/700/o3syd0/1997/1/1/201b043c19e24cfa9d03f25baef4ec9c~.jpeg.webp', isPrimary: true }],
             totalSold: 1102, rating: 4.9, reviews: 290, weight: 800
         },
         {
             id: 'p20', shopId: 'toko_02', name: 'Gantungan Kunci Motif Ulos',
             description: 'Gantungan kunci cantik dengan paduan motif ulos asli dan kayu ukir. Pilihan souvenir kerajinan khas lokal yang menarik.',
             price: 15000, stock: 120, categoryId: 'cat_kriya', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1531835551805-16d864c8d311?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://down-id.img.susercontent.com/file/id-11134207-7r990-lmitye0f5wng18', isPrimary: true }],
             totalSold: 420, rating: 4.6, reviews: 85, weight: 50
         },
         {
             id: 'p21', shopId: 'toko_02', name: 'Syal Tenun Ulos Batak',
             description: 'Syal tenun tangan motif Batak yang elegan dan hangat. Dapat digunakan untuk acara formal maupun aksesoris sehari-hari.',
             price: 125000, stock: 25, categoryId: 'cat_kriya', status: true,
-            images: [{ imgUrl: 'https://images.unsplash.com/photo-1604762433015-bc8399580df7?w=400&q=80', isPrimary: true }],
+            images: [{ imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2MzdicHoQpixv-Yw_AOMjx5B-NMESVq_eZmdm_SS5_Q&s', isPrimary: true }],
             totalSold: 215, rating: 4.8, reviews: 92, weight: 200
         }
     ],
@@ -517,20 +516,20 @@ export const initialData = {
 
     reviews: [
         // ── toko_01: Roti Ganda Siantar (seller test account) ──────────────────
-        { id: 'rev_1',  productId: 'p1', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Rotinya enak banget! Lembut dan legit, sudah langganan sejak lama. Setiap pagi pasti beli sini deh.', sellerReply: 'Terima kasih banyak kak Budi! Senang sekali bisa jadi pilihan sarapan keluarga. Sampai jumpa besok pagi ya!', createdAt: new Date(Date.now() - 172800000).toISOString() },
-        { id: 'rev_5',  productId: 'p2', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Roti isi coklat kejunya melimpah banget, anak-anak suka banget! Kemarin beli 2 bungkus langsung habis. Highly recommended!', sellerReply: '', createdAt: new Date(Date.now() - 3600000).toISOString() },
-        { id: 'rev_6',  productId: 'p3', userId: 'u_2', shopId: 'toko_01', rating: 4, comment: 'Bolu gulungnya enak tapi menurut saya sedikit terlalu manis. Teksturnya lembut banget sih, mungkin next time minta yang versi less sugar.', sellerReply: '', createdAt: new Date(Date.now() - 7200000).toISOString() },
-        { id: 'rev_7',  productId: 'p1', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Sudah jadi oleh-oleh favorit saya kalau dari Siantar. Dibawa ke Jakarta masih enak dan tahan 3 hari. Packagingnya juga rapi.', sellerReply: '', createdAt: new Date(Date.now() - 10800000).toISOString() },
-        { id: 'rev_8',  productId: 'p2', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Pesenan saya cepat banget diproses. Roti masih hangat waktu sampai, isinya penuh tidak pelit. Penjual ramah dan responsif juga.', sellerReply: 'Wah terima kasih kak! Kami selalu usahakan kirim selagi hangat. Senang bisa melayani!', createdAt: new Date(Date.now() - 86400000).toISOString() },
-        { id: 'rev_9',  productId: 'p3', userId: 'u_1', shopId: 'toko_01', rating: 4, comment: 'Bolu gulung pandannya harum banget, krimnya tidak terlalu berat. Cocok untuk teman ngopi pagi. Ukurannya cukup besar untuk harganya.', sellerReply: '', createdAt: new Date(Date.now() - 14400000).toISOString() },
+        { id: 'rev_1', productId: 'p1', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Rotinya enak banget! Lembut dan legit, sudah langganan sejak lama. Setiap pagi pasti beli sini deh.', sellerReply: 'Terima kasih banyak kak Budi! Senang sekali bisa jadi pilihan sarapan keluarga. Sampai jumpa besok pagi ya!', createdAt: new Date(Date.now() - 172800000).toISOString() },
+        { id: 'rev_5', productId: 'p2', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Roti isi coklat kejunya melimpah banget, anak-anak suka banget! Kemarin beli 2 bungkus langsung habis. Highly recommended!', sellerReply: '', createdAt: new Date(Date.now() - 3600000).toISOString() },
+        { id: 'rev_6', productId: 'p3', userId: 'u_2', shopId: 'toko_01', rating: 4, comment: 'Bolu gulungnya enak tapi menurut saya sedikit terlalu manis. Teksturnya lembut banget sih, mungkin next time minta yang versi less sugar.', sellerReply: '', createdAt: new Date(Date.now() - 7200000).toISOString() },
+        { id: 'rev_7', productId: 'p1', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Sudah jadi oleh-oleh favorit saya kalau dari Siantar. Dibawa ke Jakarta masih enak dan tahan 3 hari. Packagingnya juga rapi.', sellerReply: '', createdAt: new Date(Date.now() - 10800000).toISOString() },
+        { id: 'rev_8', productId: 'p2', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Pesenan saya cepat banget diproses. Roti masih hangat waktu sampai, isinya penuh tidak pelit. Penjual ramah dan responsif juga.', sellerReply: 'Wah terima kasih kak! Kami selalu usahakan kirim selagi hangat. Senang bisa melayani!', createdAt: new Date(Date.now() - 86400000).toISOString() },
+        { id: 'rev_9', productId: 'p3', userId: 'u_1', shopId: 'toko_01', rating: 4, comment: 'Bolu gulung pandannya harum banget, krimnya tidak terlalu berat. Cocok untuk teman ngopi pagi. Ukurannya cukup besar untuk harganya.', sellerReply: '', createdAt: new Date(Date.now() - 14400000).toISOString() },
         { id: 'rev_10', productId: 'p1', userId: 'u_2', shopId: 'toko_01', rating: 3, comment: 'Rotinya masih enak tapi kali ini terasa agak kurang empuk dibanding biasanya. Mungkin karena saya ambil sore hari jadi kurang fresh? Tetap akan balik lagi kok.', sellerReply: '', createdAt: new Date(Date.now() - 18000000).toISOString() },
         { id: 'rev_11', productId: 'p2', userId: 'u_1', shopId: 'toko_01', rating: 5, comment: 'Kualitasnya konsisten! Sudah berlangganan hampir 2 tahun, tidak pernah kecewa. Roti isi kejunya selalu juara. Teruskan ya kak!', sellerReply: '', createdAt: new Date(Date.now() - 21600000).toISOString() },
         { id: 'rev_12', productId: 'p3', userId: 'u_2', shopId: 'toko_01', rating: 5, comment: 'Saya pesan buat ulang tahun ponakan, dikemas cantik dan rapi sekali. Rasanya juga tidak mengecewakan. Pasti order lagi untuk acara berikutnya!', sellerReply: '', createdAt: new Date(Date.now() - 43200000).toISOString() },
 
         // ── toko lain (untuk kelengkapan data) ───────────────────────────────
-        { id: 'rev_2',  productId: 'p7',  userId: 'u_1', shopId: 'toko_03', rating: 5, comment: 'Baksonya juara! Kuahnya segar, baksonya kenyal. Recommended!', sellerReply: '', createdAt: new Date(Date.now() - 86400000).toISOString() },
-        { id: 'rev_3',  productId: 'p4',  userId: 'u_2', shopId: 'toko_02', rating: 5, comment: 'Kualitas ulosnya sangat bagus, motif tradisionalnya indah. Pengiriman cepat.', sellerReply: 'Terima kasih kak, semoga bermanfaat!', createdAt: new Date(Date.now() - 43200000).toISOString() },
-        { id: 'rev_4',  productId: 'p9',  userId: 'u_1', shopId: 'toko_04', rating: 4, comment: 'Kopinya harum sekali, rasa arabikanya kuat. Suka!', sellerReply: '', createdAt: new Date(Date.now() - 21600000).toISOString() }
+        { id: 'rev_2', productId: 'p7', userId: 'u_1', shopId: 'toko_03', rating: 5, comment: 'Baksonya juara! Kuahnya segar, baksonya kenyal. Recommended!', sellerReply: '', createdAt: new Date(Date.now() - 86400000).toISOString() },
+        { id: 'rev_3', productId: 'p4', userId: 'u_2', shopId: 'toko_02', rating: 5, comment: 'Kualitas ulosnya sangat bagus, motif tradisionalnya indah. Pengiriman cepat.', sellerReply: 'Terima kasih kak, semoga bermanfaat!', createdAt: new Date(Date.now() - 43200000).toISOString() },
+        { id: 'rev_4', productId: 'p9', userId: 'u_1', shopId: 'toko_04', rating: 4, comment: 'Kopinya harum sekali, rasa arabikanya kuat. Suka!', sellerReply: '', createdAt: new Date(Date.now() - 21600000).toISOString() }
     ],
 
     vouchers: [
